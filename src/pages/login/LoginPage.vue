@@ -113,13 +113,14 @@ const login = async () => {
     password: password.value,
   };
   const res = await store.dispatch("login/loginUser", dataLogin);
+  console.log('login page',res)
   if (res) {
-    console.log("login res", res);
+    console.log('masuk if has res login page',res)
     router.push("/");
   }
 };
 
 const signUp = () => {
-  console.log("signUp", username.value, password.value);
+  // console.log("signUp", username.value, password.value);
 };
 </script>

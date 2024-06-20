@@ -126,6 +126,6 @@ const back = () => {
 
 onMounted(async () => {
   const res = await store.dispatch("groceries/getDetail", route.params.id);
-  console.log("dataDetail detail", dataDetail);
+  // console.log("dataDetail detail", dataDetail);
 });
 </script>

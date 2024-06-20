@@ -24,7 +24,6 @@ export default boot(({ app }) => {
     function (config) {
       // Get the authentication token from session storage
       const authToken = localStorage.getItem('authUser');
-      console.log('YUHUUU0', authToken)
       // Set the authorization header if the token exists
       if (authToken) {
         // config.headers.Authorization = `Bearer ${authToken}`;

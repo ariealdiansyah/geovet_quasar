@@ -1,4 +1,5 @@
 <template>
+  <span>{{ props.data }}</span>
   <q-table
     v-model:pagination="pagination"
     :rows="props.data"
@@ -141,7 +142,7 @@ const pagination = computed({
     return store.getters["global/getPagination"];
   },
   set: (val) => {
-    // console.log("value pagination", val);
+    console.log("value pagination", val);
   },
 });
 
@@ -153,17 +154,17 @@ const addData = () => {
 };
 
 const onDetail = (data) => {
-  console.log("test click table", data);
+  // console.log("test click table", data);
   emit("onAction", "detail", data.id);
 };
 
 const onEdit = (data) => {
-  console.log("test click table", data);
+  // console.log("test click table", data);
   emit("onAction", "edit", data.id);
 };
 
 const onDelete = (data) => {
-  console.log("test click table", data);
+  // console.log("test click table", data);
   emit("onAction", "delete", data.id);
 };
 </script>

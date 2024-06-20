@@ -5,3 +5,4 @@ export const checkUser = ({ commit }) => {
     commit('setUserActive', sessionStorage.getItem('authUser'))
   }
 }
+

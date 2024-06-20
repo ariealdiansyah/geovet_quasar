@@ -109,7 +109,7 @@ const options = ["Dry Food", "Wet Food", "Shampoo", "Food Bowl", "Cat Litter"];
 
 const editGroceries = async () => {
   // router.push(`${route.params.id}/edit`);
-  console.log("aya data ", dataDetail);
+  // console.log("aya data ", dataDetail);
   const res = await store.dispatch("groceries/editData", {
     id: route.params.id,
     value: dataDetail.value,
@@ -176,7 +176,7 @@ const dataDetail = computed(() => store.state.groceries.dataDetail);
 
 onMounted(async () => {
   const res = await store.dispatch("groceries/getDetail", route.params.id);
-  console.log("dataDetail detail", dataDetail);
+  // console.log("dataDetail detail", dataDetail);
   // if (res) {
   //   dataTemp.value = { ...dataDetail };
   // }

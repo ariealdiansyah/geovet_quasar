@@ -1,16 +1,22 @@
 import { api } from 'boot/axios'
 
 export const getData = async ({ rootGetters, commit }, filter) => {
-  console.log('masuk data', filter)
   try {
     const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
-
-    const res = await api.get(`/medicine/?page=${handlerPage.page}&per_page=${handlerPage.rowsPerPage}&search=${filter}`)
+    const dynamicParams = {
+      page: handlerPage.page,
+      per_page: handlerPage.rowsPerPage,
+      search: filter,
+      // Add more parameters as needed
+    };
+    const res = await api.get(`/medicine/`, {
+      params: dynamicParams,
+    })
 
     if (res) {
+      const { data } = res.data;
       console.log('res', res.data)
-      commit('setData', res.data)
+      commit('setData', data.data)
     }
     return res.data
   } catch (error) {
@@ -18,12 +24,9 @@ export const getData = async ({ rootGetters, commit }, filter) => {
   }
 }
 
-export const addData = async ({ rootGetters, commit }, data) => {
-  console.log('masuk data', data)
+export const addData = async (data) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
-    const res = await api.post(`/medicine/`, data)
+    const res = await api.post(`/medicine/create`, data)
     if (res) {
       console.log('res', res.data)
     }
@@ -33,11 +36,8 @@ export const addData = async ({ rootGetters, commit }, data) => {
   }
 }
 
-export const editData = async ({ rootGetters, commit }, data) => {
-  console.log('masuk data', data)
+export const editData = async ({ rootGetters }, data) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
     const res = await api.post(`/medicine/`, data)
     if (res) {
       console.log('res', res.data)
@@ -49,11 +49,7 @@ export const editData = async ({ rootGetters, commit }, data) => {
 }
 
 export const getDetail = async ({ rootGetters, commit }, id) => {
-  console.log('masuk data', filter)
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
-
     const res = await api.get(`/medicine/${id}`)
 
     if (res) {
@@ -65,3 +61,16 @@ export const getDetail = async ({ rootGetters, commit }, id) => {
     console.error(error);
   }
 }
+
+export const deleteData = async ({ rootGetters, dispatch }, id) => {
+  try {
+    const res = await api.delete(`/medicine/delete/${id}`);
+    if (res) {
+      console.log("res", res.data);
+      dispatch("getData");
+    }
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

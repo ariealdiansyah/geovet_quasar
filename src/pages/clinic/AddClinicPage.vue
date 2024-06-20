@@ -1,7 +1,11 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
-      <q-icon name="assignment_turned_in" class="text-weight-bold" size="32px" />
+      <q-icon
+        name="assignment_turned_in"
+        class="text-weight-bold"
+        size="32px"
+      />
       <span class="q-mx-md">Tambah Rekam Medis</span>
     </div>
     <div class="container q-pa-sm">
@@ -278,29 +282,128 @@
                 />
               </div>
             </div>
-            <div class="row q-mb-sm items-start">
-              <div class="col-4 text-bold text-right">Obat Resep</div>
-              <div class="col-8 q-pl-md">
-                <q-input
-                  class="custom-input-32"
-                  v-model="recipe"
-                  name="Recipe"
-                  outlined
-                  dense
-                  autogrow
-                  autocomplete="off"
-                  hide-bottom-space
-                />
+            <template v-for="(item, idx) in recipe" :key="item">
+              <div class="row q-mb-sm items-start">
+                <div class="col-4 text-bold text-right" v-if="idx === 0">
+                  Obat Resep
+                </div>
+                <div class="col-4 text-bold text-right" v-else></div>
+                <div class="col-7 q-pl-md">
+                  <q-input
+                    class="custom-input-32"
+                    :name="`Recipe-${idx}`"
+                    v-model="recipe[idx]"
+                    outlined
+                    :placeholder="`Test - ${idx}`"
+                    dense
+                    debounce="500"
+                    autogrow
+                    hide-bottom-space
+                  />
+                </div>
+                <div class="col q-pl-sm" v-if="idx === 0">
+                  <q-btn color="primary" icon="add" @click="addRecipe" />
+                </div>
               </div>
-            </div>
+            </template>
             <div class="row q-mb-sm items-start">
               <div class="col-4 text-bold text-right"></div>
               <div class="col-8 q-pl-md">
-                <q-checkbox v-model="isOpname" :disable="disableOpname" label="Opname" />
+                <q-checkbox
+                  v-model="isOpname"
+                  :disable="disableOpname"
+                  label="Opname"
+                />
               </div>
             </div>
           </div>
         </div>
+        <div class="row q-gutter-x-lg q-mt-lg">
+          <div class="col-md-5 col-sm-12">
+            <div class="row q-mb-sm items-center">
+              <div class="col-12 flex justify-start">
+                <q-btn-dropdown
+                  auto-close
+                  no-caps
+                  unelevated
+                  align="left"
+                  color="primary"
+                  label="Add Item or Medicine"
+                >
+                  <q-list>
+                    <q-item clickable v-close-popup @click="addMedicine">
+                      <q-item-section>
+                        <q-item-label>Add Medicine</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-close-popup @click="addPetshop">
+                      <q-item-section>
+                        <q-item-label>Add Petshop</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <template v-if="listMedicine.length > 0 || listPetshop.length > 0">
+          <div class="row q-gutter-x-lg q-mt-lg">
+            <div class="col-md-5 col-sm-12" v-if="listMedicine.length > 0">
+              <template v-for="(item, idx) in listMedicine" :key="item">
+                <div class="row q-mb-sm items-center">
+                  <div class="col-3 text-bold text-right">Nama Obat</div>
+                  <div class="col-8 q-pl-md">
+                    <q-field
+                      class="custom-input-32"
+                      :value="item[idx]"
+                      :name="`Obat-${item[idx]}`"
+                      autogrow
+                      outlined
+                      dense
+                      autocomplete="off"
+                      hide-bottom-space
+                    />
+                  </div>
+                  <div class="col q-pl-sm">
+                    <q-btn
+                      color="primary"
+                      icon="remove"
+                      @click="deleteListMedicine(idx)"
+                    />
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="col-md-5 col-sm-12" v-if="listPetshop.length > 0">
+              <template v-for="(item, idx) in listPetshop" :key="item">
+                <div class="row q-mb-sm items-start">
+                  <div class="col-3 text-bold text-right">Nama Item</div>
+                  <div class="col-8 q-pl-md">
+                    <q-field
+                      class="custom-input-32"
+                      :value="item[idx]"
+                      :name="`Petshop-${item[idx]}`"
+                      autogrow
+                      outlined
+                      dense
+                      autocomplete="off"
+                      hide-bottom-space
+                    />
+                  </div>
+                  <div class="col q-pl-sm">
+                    <q-btn
+                      color="primary"
+                      icon="remove"
+                      @click="deleteListPetshop(idx)"
+                    />
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
         <div class="row q-gutter-x-lg q-mt-lg">
           <div class="col-md-11">
             <div class="row q-mb-sm items-center">
@@ -325,7 +428,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, reactive } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { date } from "quasar";
@@ -348,23 +451,12 @@ const diagnosis = ref("");
 const medical_action = ref("");
 const isOpname = ref(false);
 const disableOpname = ref(false);
-const recipe = ref("");
+const recipe = ref([""]);
+const listMedicine = ref([]);
+const listPetshop = ref([]);
 const dialogOpname = ref(false);
 const dateMedic = ref(date.formatDate(new Date(), "DD-MM-YYYY HH:mm"));
 const medical_number = ref("");
-
-const generateNumber = () => {
-  medical_number.value = `KC-00001`;
-};
-
-watch(isOpname, (value) => {
-  console.log("check val", value);
-  store.commit("global/setDialogOpname", value);
-});
-
-const saveOpname = () => {
-  disableOpname.value = true;
-};
 
 const addClinic = async () => {
   console.log(
@@ -373,18 +465,57 @@ const addClinic = async () => {
     dateMedic.value,
     medical_number.value,
     customer_phone.value,
-    customer_address.value
+    customer_address.value,
+    pet_name.value,
+    pet_type.value,
+    characteristic_pet.value,
+    age_pet.value,
+    weight_pet.value,
+    temperature_pet.value,
+    anamnase.value,
+    diagnosis.value,
+    medical_action.value,
+    recipe.value
   );
-  // const res = await store.dispatch("clinic/addData", {
-  //   customer_name: customer_name.value,
-  //   date: date.value,
-  //   // type: type.value,
-  //   // stock: stock.value,
-  // });
+};
 
-  // if (res) {
-  //   console.log("Sukses Add data");
-  //   router.push("/clinic");
-  // }
+const generateNumber = () => {
+  medical_number.value = `KC-00001`;
+};
+
+const addRecipe = () => {
+  console.log(recipe.value);
+  recipe.value.push("Test");
+};
+
+watch(isOpname, (value) => {
+  // console.log("check val", value);
+  store.commit("global/setDialogOpname", value);
+});
+
+const saveOpname = () => {
+  disableOpname.value = true;
+};
+
+const addMedicine = () => {
+  // alert("Add Medicine");
+  listMedicine.value.push("Object Obat 1");
+};
+
+const addPetshop = () => {
+  // alert("Add Petshop");
+  listPetshop.value.push("Object Petshop 1");
+};
+
+const deleteListPetshop = (id) => {
+  console.log("test", listPetshop.value);
+  listPetshop.value.splice(id, 1);
+  console.log("test petshop", listPetshop.value);
+};
+
+const deleteListMedicine = (id) => {
+  console.log("test", listMedicine.value);
+  listMedicine.value.splice(id, 1);
+  console.log("test", listMedicine.value);
 };
 </script>

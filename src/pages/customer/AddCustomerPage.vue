@@ -1,7 +1,18 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-sm">
-      <q-icon name="assignment_turned_in" class="text-weight-bold" size="32px" />
+      <q-btn
+        flat
+        round
+        color="primary"
+        icon="arrow_back"
+        @click="router.back()"
+      />
+      <q-icon
+        name="assignment_turned_in"
+        class="text-weight-bold"
+        size="32px"
+      />
       <span class="q-mx-md">Add Customer</span>
     </div>
     <div class="container q-pa-sm">
@@ -67,7 +78,7 @@
                   unelevated
                   no-caps
                   color="primary"
-                  label="Add Groceries"
+                  label="Add Customer"
                   type="submit"
                 />
               </div>
@@ -95,7 +106,7 @@ const isError = ref(false);
 const errorMessage = ref("");
 
 const addCustomer = async () => {
-  console.log("Add Groceries", name.value, address.value, phoneNumber.value);
+  // console.log("Add Groceries", name.value, address.value, phoneNumber.value);
   const res = await store.dispatch("customer/addData", {
     name: name.value,
     address: address.value,
@@ -103,7 +114,7 @@ const addCustomer = async () => {
   });
 
   if (res) {
-    console.log("Sukses Add data");
+    // console.log("Sukses Add data");
     router.push("/customer");
   }
 };

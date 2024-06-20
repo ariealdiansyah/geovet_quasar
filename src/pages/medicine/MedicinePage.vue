@@ -5,20 +5,49 @@
       <span class="q-mx-md">Medicine</span>
     </div>
     <div class="container q-pa-sm">
-      <TableData :data="data" @onRequest="requestData" @onAddData="addDataMember" />
+      <TableData
+        :data="data"
+        :columns="columns"
+        :loading="isLoading"
+        @onRequest="requestData"
+        canDelete
+        canEdit
+        @onAddData="addDataMedicine"
+        @onAction="addActionMedicine"
+      />
     </div>
   </q-page>
 </template>
 
 <script setup>
 import { useStore } from "vuex";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import TableData from "src/components/TableData/TableData.vue";
 import { showNotification } from "src/utils/ui";
 import { useRouter } from "vue-router";
 
 const store = useStore();
 const router = useRouter();
+const isLoading = ref(false);
+
+const columns = ref([
+  {
+    name: "name",
+    required: true,
+    label: "Nama Item",
+    align: "left",
+    field: "name",
+  },
+  { name: "type", align: "left", label: "Tipe Item", field: "type" },
+  { name: "stock", align: "center", label: "Stock", field: "stock" },
+  {
+    name: "price",
+    label: "Harga",
+    align: "center",
+    field: "sell_price",
+    format: (val) => `Rp ${Formatter.commaAmount(val)}`,
+  },
+]);
 
 const requestData = async (eventRequest) => {
   if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
@@ -36,13 +65,32 @@ const data = computed(() => store.getters["member/getData"]);
 
 onMounted(async () => {
   store.commit("global/setDefaultGlobalPagination");
-  const res = await store.dispatch("member/getDataMember");
-  console.log("onMounted", res, data.value);
+  const res = await store.dispatch("medicine/getData");
 });
 
-const addDataMember = () => {
-  console.log("addData");
+const addDataMedicine = () => {
   // router.push(`medicine/1`);
-  router.push("medicine/addMedicine");
+  router.push("medicine/addData");
+};
+
+const addActionMedicine = async (type, id) => {
+  console.log("action", type, id);
+  switch (type) {
+    case "detail":
+      router.push(`medicine/${id}`);
+      break;
+    case "edit":
+      router.push(`medicine/${id}/edit`);
+      break;
+    case "delete":
+      isLoading.value = true;
+      const res = await store.dispatch("medicine/deleteData", id);
+      if (res) {
+        isLoading.value = false;
+      }
+      break;
+    default:
+      break;
+  }
 };
 </script>

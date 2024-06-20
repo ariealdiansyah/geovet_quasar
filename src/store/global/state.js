@@ -12,6 +12,8 @@ export default function () {
       role: '',
       name: ''
     },
-    dialogOpname: false
+    dialogOpname: false,
+    customerList: [],
+    petList: [],
   }
 }

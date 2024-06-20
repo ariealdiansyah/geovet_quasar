@@ -43,13 +43,11 @@ export const getDataClinic = async ({ rootGetters, commit }, filter) => {
 };
 
 export const addData = async ({ rootGetters, commit }, data) => {
-  console.log("masuk data", data);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
     const res = await api.post(`/groceries/`, data);
     if (res) {
-      console.log("res", res.data);
+      // console.log("res", res.data);
     }
     return res.data;
   } catch (error) {
@@ -58,15 +56,13 @@ export const addData = async ({ rootGetters, commit }, data) => {
 };
 
 export const editData = async ({ rootGetters, commit }, payload) => {
-  console.log("masuk data edit", payload);
   try {
     const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
     const res = await api.patch(`/groceries/update/${payload.id}`, {
       ...payload.value
     })
     if (res) {
-      console.log('res', res.data)
+      // console.log('res', res.data)
     }
     return res.data
   } catch (error) {
@@ -75,13 +71,11 @@ export const editData = async ({ rootGetters, commit }, payload) => {
 };
 
 export const deleteData = async ({ rootGetters, dispatch }, id) => {
-  console.log("masuk data", id);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
     const res = await api.delete(`/groceries/delete/${id}`);
     if (res) {
-      console.log("res", res.data);
+      // console.log("res", res.data);
       dispatch("getData");
     }
     return res.data;
@@ -91,15 +85,11 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
 };
 
 export const getDetail = async ({ rootGetters, commit }, id) => {
-  console.log("masuk data", id);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
-
     const res = await api.get(`/groceries/detail/${id}`);
 
     if (res) {
-      console.log("res", res.data);
       const { data } = res.data;
       commit("setDataDetail", data);
     }

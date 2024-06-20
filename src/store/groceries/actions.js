@@ -1,11 +1,8 @@
 import { api } from "boot/axios";
 
 export const getData = async ({ rootGetters, commit }, filter) => {
-  // console.log('masuk data', filter)
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
-
     const dynamicParams = {
       page: handlerPage.page,
       per_page: handlerPage.rowsPerPage,
@@ -14,42 +11,38 @@ export const getData = async ({ rootGetters, commit }, filter) => {
     };
 
     // const res = await api.get(`/groceries/?page=${handlerPage.page}&per_page=${handlerPage.rowsPerPage}&search=${filter}`)
-    const res = await api.get(`/groceries/`, {
+    const res = await api.get(`/groceries`, {
       params: dynamicParams,
     });
-
-    const { data } = res;
+    console.log(res)
+    const { data } = res.data;
 
     if (data) {
-      // console.log('res', data.data)
-      // console.log('res 2', data.data.data)
-      commit("setData", data.data.data);
+      commit("setData", data.data);
       commit(
         "global/setLocalPagination",
         {
           sortBy: "asc",
           descending: false,
-          page: data.data.current_page,
-          rowsPerPage: data.data.per_page,
-          rowsNumber: data.data.total,
+          page: data.current_page,
+          rowsPerPage: data.per_page,
+          rowsNumber: data.total,
         },
         { root: true }
       );
     }
-    return res.data;
+    return data;
   } catch (error) {
     console.error(error);
   }
 };
 
 export const addData = async ({ rootGetters, commit }, data) => {
-  console.log("masuk data", data);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
     const res = await api.post(`/groceries/`, data);
     if (res) {
-      console.log("res", res.data);
+      // console.log("res", res.data);
     }
     return res.data;
   } catch (error) {
@@ -58,10 +51,8 @@ export const addData = async ({ rootGetters, commit }, data) => {
 };
 
 export const editData = async ({ rootGetters, commit }, payload) => {
-  console.log("masuk data edit", payload);
   try {
     const handlerPage = rootGetters['global/getPagination']
-    console.log('handlerPage', handlerPage)
     const res = await api.patch(`/groceries/update/${payload.id}`, {
       ...payload.value
     })
@@ -75,10 +66,8 @@ export const editData = async ({ rootGetters, commit }, payload) => {
 };
 
 export const deleteData = async ({ rootGetters, dispatch }, id) => {
-  console.log("masuk data", id);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
     const res = await api.delete(`/groceries/delete/${id}`);
     if (res) {
       console.log("res", res.data);
@@ -91,11 +80,8 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
 };
 
 export const getDetail = async ({ rootGetters, commit }, id) => {
-  console.log("masuk data", id);
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
-
     const res = await api.get(`/groceries/detail/${id}`);
 
     if (res) {

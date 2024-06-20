@@ -15,6 +15,7 @@
         canDelete
         canEdit
       />
+      <!-- <span>{{ data }}</span> -->
     </div>
   </q-page>
 </template>
@@ -44,7 +45,7 @@ const columns = ref([
     name: "price",
     label: "Harga",
     align: "center",
-    field: "price",
+    field: "sell_price",
     format: (val) => `Rp ${Formatter.commaAmount(val)}`,
   },
 ]);
@@ -57,7 +58,7 @@ const requestData = async (eventRequest) => {
         ...eventRequest.pagination,
         rowsPerPage: eventRequest.pagination.rowsNumber,
       };
-      console.log("temp pagination", temp);
+      // console.log("temp pagination", temp);
       store.commit("global/setLocalPagination", temp);
     } else {
       store.commit("global/setLocalPagination", eventRequest.pagination);
@@ -87,11 +88,9 @@ const addActionGroceries = async (type, id) => {
       router.push(`groceries/${id}`);
       break;
     case "edit":
-      console.log("edit", type);
       router.push(`groceries/${id}/edit`);
       break;
     case "delete":
-      console.log("delete", type);
       isLoading.value = true;
       const res = await store.dispatch("groceries/deleteData", id);
       if (res) {

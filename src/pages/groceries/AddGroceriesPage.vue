@@ -1,7 +1,11 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
-      <q-icon name="assignment_turned_in" class="text-weight-bold" size="32px" />
+      <q-icon
+        name="assignment_turned_in"
+        class="text-weight-bold"
+        size="32px"
+      />
       <span class="q-mx-md">Add Groceries</span>
     </div>
     <div class="container q-pa-sm">
@@ -68,6 +72,26 @@
                 </span>
               </div>
             </div>
+            <!-- <DynamicSelect
+              classContainer="row q-mb-sm items-center"
+              classLabel="col-3 text-bold text-right"
+              classSelect="col-6 q-pl-md"
+              nameForm="Customer"
+              :value="type"
+              :options="store.state.global.customerList"
+              label="Nama Pelanggan"
+              @onChange="testOnChange"
+            />
+            <DynamicSelect
+              classContainer="row q-mb-sm items-center"
+              classLabel="col-3 text-bold text-right"
+              classSelect="col-6 q-pl-md"
+              nameForm="Customer"
+              :value="type"
+              :options="store.state.global.petList"
+              label="Nama Hewan Peliharaan"
+              @onChange="testOnChange"
+            /> -->
             <div class="row q-mb-sm items-center">
               <div class="col-3"></div>
               <div class="col-6 q-pl-md">
@@ -93,6 +117,7 @@ import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import DynamicSelect from "src/components/Form/DynamicSelect.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -104,7 +129,7 @@ const stock = ref(0);
 const options = ["Dry Food", "Wet Food", "Shampoo", "Food Bowl", "Cat Litter"];
 
 const addGroceries = async () => {
-  console.log("Add Groceries", name.value, price.value, type.value, stock.value);
+  // console.log("Add Groceries", name.value, price.value, type.value, stock.value);
   const res = await store.dispatch("groceries/addData", {
     name: name.value,
     price: price.value,
@@ -113,8 +138,15 @@ const addGroceries = async () => {
   });
 
   if (res) {
-    console.log("Sukses Add data");
+    // console.log("Sukses Add data");
     router.push("/groceries");
   }
+};
+
+const testOnChange = (value) => {
+  console.log("value", value);
+  console.log("id", value.id);
+  console.log("label", value.label);
+  type.value = value.label;
 };
 </script>

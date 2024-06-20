@@ -10,6 +10,7 @@ import groceries from "./groceries";
 import pets from "./pets";
 import medicine from "./medicine";
 import clinic from "./clinic";
+import groomings from "./groomings";
 
 /*
  * If not building with SSR mode, you can
@@ -45,6 +46,7 @@ export default store(function (/* { ssrContext } */) {
       pets,
       medicine,
       clinic,
+      groomings
     },
 
     // enable strict mode (adds overhead!)

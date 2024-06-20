@@ -12,7 +12,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/customer/CustomerPage.vue') },
-      { path: ':id', component: () => import('pages/customer/DetailCustomerPage.vue') },
+      {
+        path: ':id',
+        children: [
+          { path: '', component: () => import('pages/customer/DetailCustomerPage.vue') },
+          { path: 'edit', component: () => import('pages/customer/EditCustomerPage.vue') },
+        ]
+      },
       { path: 'addCustomer', component: () => import('pages/customer/AddCustomerPage.vue') },
     ]
   },
@@ -21,7 +27,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/pets/PetsPage.vue') },
-      { path: ':id', component: () => import('pages/pets/DetailPetsPage.vue') },
+      {
+        path: ':id',
+        children: [
+          { path: '', component: () => import('pages/pets/DetailPetsPage.vue') },
+          { path: 'edit', component: () => import('pages/pets/EditPetsPage.vue') },
+        ]
+      },
       { path: 'addPets', component: () => import('pages/pets/AddPetsPage.vue') },
     ]
   },

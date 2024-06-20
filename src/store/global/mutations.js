@@ -2,6 +2,7 @@ export const setLocalPagination = (state, value) => {
   const {
     sortBy, descending, page, rowsPerPage, rowsNumber
   } = value;
+  console.log('check pagination', value)
   state.localPagination = {
     sortBy,
     descending,
@@ -22,17 +23,43 @@ export const setDefaultGlobalPagination = (state, value) => {
 }
 
 export const setUserActive = (state, value) => {
-  console.log(state, value)
+  console.log('value mutations', value)
   const [header, data, signature] = value.split('.');
   const decodedPayload = JSON.parse(atob(data));
-  console.log('user mutations', decodedPayload)
-  state.userProfile.username = decodedPayload.username
-  state.userProfile.name = decodedPayload.name
-  state.userProfile.role = decodedPayload.role
+  const userProfile = {
+    username: decodedPayload.username,
+    name: decodedPayload.name,
+    role: decodedPayload.role
+  }
+  console.log('mutations', userProfile)
+  state.userProfile = userProfile
   state.token = value
-  console.log('get', state.userProfile)
 }
 
 export const setDialogOpname = (state, value) => {
   state.dialogOpname = value
+}
+
+export const setListCustomer = (state, payload) => {
+  const list = payload.map((item) => {
+    return {
+      ...item,
+      label: `${item.name} - ${item.address}`,
+      valueOptions: item.id
+    }
+  })
+  console.log('update customer list', list)
+  state.customerList = list
+}
+
+export const setListPets = (state, payload) => {
+  const list = payload.map((item) => {
+    return {
+      ...item,
+      label: `${item.name} - ${item.address}`,
+      valueOptions: item.id
+    }
+  })
+  console.log('update pet list', list)
+  state.petList = list
 }

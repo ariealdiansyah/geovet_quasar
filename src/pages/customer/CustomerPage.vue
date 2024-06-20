@@ -23,7 +23,7 @@ const router = useRouter();
 const requestData = async (eventRequest) => {
   if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
     store.commit("global/setLocalPagination", eventRequest.pagination);
-    await store.dispatch("member/getDataMember", eventRequest.filter);
+    await store.dispatch("customer/getData", eventRequest.filter);
   } else {
     showNotification({
       message: "Masukkan minimal 3 huruf/angka untuk filter",
@@ -32,16 +32,16 @@ const requestData = async (eventRequest) => {
     });
   }
 };
-const data = computed(() => store.getters["member/getData"]);
+const data = computed(() => store.getters["customer/getData"]);
 
 onBeforeMount(async () => {
   store.commit("global/setDefaultGlobalPagination");
-  const res = await store.dispatch("member/getDataMember");
-  console.log("onMounted", res, data.value);
+  const res = await store.dispatch("customer/getData");
+  // console.log("onMounted", res, data.value);
 });
 
 const addDataMember = () => {
-  console.log("addData");
+  // console.log("addData");
   // router.push(`member/1`);
   router.push("customer/addCustomer");
 };
