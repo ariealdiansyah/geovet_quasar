@@ -89,14 +89,24 @@ const columns = ref([
     label: "Biaya Pemeriksaan",
     align: "center",
     field: "clinic_price",
-    format: (val) => `Rp ${Formatter.commaAmount(val)}`,
+    format: (val) =>
+      new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(val),
   },
   {
     name: "total_price",
     label: "Total Biaya",
     align: "center",
     field: "total_price",
-    format: (val) => `Rp ${Formatter.commaAmount(val)}`,
+    format: (val) =>
+      new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(val),
   },
 ]);
 

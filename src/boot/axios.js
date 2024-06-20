@@ -37,6 +37,12 @@ export default boot(({ app }) => {
       return Promise.reject(error);
     }
   );
+
+  // api.interceptors.response.use(
+  //   function (response) {
+  //     return response.data
+  //   }
+  // )
 })
 
 export { axios, api }

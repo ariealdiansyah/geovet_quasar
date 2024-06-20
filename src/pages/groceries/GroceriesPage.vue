@@ -46,7 +46,12 @@ const columns = ref([
     label: "Harga",
     align: "center",
     field: "sell_price",
-    format: (val) => `Rp ${Formatter.commaAmount(val)}`,
+    format: (val) =>
+      new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(val),
   },
 ]);
 
@@ -58,7 +63,7 @@ const requestData = async (eventRequest) => {
         ...eventRequest.pagination,
         rowsPerPage: eventRequest.pagination.rowsNumber,
       };
-      // console.log("temp pagination", temp);
+      console.log("temp pagination", temp);
       store.commit("global/setLocalPagination", temp);
     } else {
       store.commit("global/setLocalPagination", eventRequest.pagination);

@@ -1,4 +1,5 @@
 export const setData = (state, payload) => {
+  console.log('payload groceries', payload)
   state.data = payload
 }
 

@@ -57,7 +57,12 @@ const columns = ref([
     label: "Harga",
     align: "center",
     field: "price",
-    format: (val) => `Rp ${Formatter.commaAmount(val)}`,
+    format: (val) =>
+      new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(val),
   },
 ]);
 

@@ -1,5 +1,4 @@
 <template>
-  <span>{{ props.data }}</span>
   <q-table
     v-model:pagination="pagination"
     :rows="props.data"
