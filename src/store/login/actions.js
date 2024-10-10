@@ -72,7 +72,6 @@ export const getAllDataMedicine = async ({ rootGetters, commit }) => {
 }
 
 export const logout = () => {
-  console.log(router);  // Add this line to see if the router is correctly initialized
   localStorage.removeItem("authUser");
   localStorage.clear();
   router.push('/login');

@@ -157,17 +157,14 @@ const addData = () => {
   router.push("clinic/addClinic");
 };
 const addActionGroceries = async (type, id) => {
-  // console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`clinic/${id}`);
       break;
     case "edit":
-      // console.log("edit", type);
       router.push(`clinic/${id}/edit`);
       break;
     case "delete":
-      // console.log("delete", type);
       isLoading.value = true;
       const res = await store.dispatch("clinic/deleteData", id);
       if (res) {
@@ -180,7 +177,6 @@ const addActionGroceries = async (type, id) => {
 };
 onMounted(async () => {
   store.commit("global/setDefaultGlobalPagination");
-  const res = await store.dispatch("clinic/getDataClinic");
-  // console.log("onMounted", res, data.value);
+  await store.dispatch("clinic/getDataClinic");
 });
 </script>

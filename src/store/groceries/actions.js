@@ -47,7 +47,6 @@ export const addData = async ({ dispatch }, data) => {
 };
 
 export const editData = async ({ dispatch }, payload) => {
-  console.log('edit data', payload)
   try {
     const res = await api.patch(`/groceries/${payload._id}`, payload)
     if (res) {
@@ -63,7 +62,6 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
   try {
     const res = await api.delete(`/groceries/${id}`);
     if (res) {
-      console.log("res", res);
       dispatch("getData");
       dispatch('login/getAllDataPetshop', null, { root: true })
     }

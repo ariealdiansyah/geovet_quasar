@@ -34,9 +34,6 @@ export const getData = async ({ rootGetters, commit }, filter) => {
 export const addData = async ({ dispatch }, data) => {
   try {
     const res = await api.post(`/customers/`, data)
-    if (res) {
-      console.log('res', res)
-    }
     dispatch('login/getAllDataCustomer', null, { root: true })
     return res
   } catch (error) {
@@ -48,7 +45,6 @@ export const editData = async ({ dispatch }, data) => {
   try {
     const res = await api.patch(`/customers/${data._id}`, data)
     if (res) {
-      console.log('res', res)
       dispatch('login/getAllDataCustomer', null, { root: true })
     }
     return res

@@ -85,9 +85,7 @@ const login = async () => {
     password: password.value,
   };
   const res = await store.dispatch("login/loginUser", dataLogin);
-  console.log("login page", res);
   if (res) {
-    console.log("masuk if has res login page", res);
     router.push("/");
   }
 };

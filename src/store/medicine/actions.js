@@ -35,11 +35,9 @@ export const getData = async ({ rootGetters, commit }, filter) => {
 }
 
 export const addData = async ({ dispatch }, data) => {
-  console.log('data obat', data)
   try {
     const res = await api.post(`/medicine`, data)
     if (res) {
-      console.log('res', res)
       dispatch("login/getAllDataMedicine", null, { root: true })
     }
     return res
@@ -50,9 +48,8 @@ export const addData = async ({ dispatch }, data) => {
 
 export const editData = async ({ dispatch }, data) => {
   try {
-    const res = await api.post(`/medicine/`, data)
+    const res = await api.patch(`/medicine/${data._id}`, data)
     if (res) {
-      console.log('res', res)
       dispatch("login/getAllDataMedicine", null, { root: true })
     }
     return res
@@ -66,7 +63,6 @@ export const getDetail = async ({ rootGetters, commit }, id) => {
     const res = await api.get(`/medicine/${id}`)
 
     if (res) {
-      console.log('res', res)
       commit('setDetail', res)
     }
     return res
@@ -79,7 +75,6 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
   try {
     const res = await api.delete(`/medicine/${id}`);
     if (res) {
-      console.log("res", res);
       dispatch("getData");
       dispatch("login/getAllDataMedicine", null, { root: true })
     }

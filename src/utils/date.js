@@ -27,3 +27,11 @@ export const getISOString = (date) => {
 export const getTextDate = (dates) => {
   return date.formatDate(new Date(dates), "DD-MMM-YYYY HH:mm")
 }
+
+export const textDateWithtoutTime = (dates) => {
+  return date.formatDate(new Date(dates), "DD MMM YYYY")
+}
+
+export const dateToday = (dates) => {
+  return date.formatDate(new Date(dates), "YYYY/MM/DD")
+}

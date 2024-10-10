@@ -180,7 +180,6 @@ const onChangeType = (value) => {
 };
 
 const customerChange = (value) => {
-  console.log("value cust", value);
   customerId.value = value;
 };
 </script>

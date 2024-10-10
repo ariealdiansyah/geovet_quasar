@@ -106,6 +106,21 @@ const routes = [
     ]
   },
   {
+    path: '/appointment',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/appointment/AppointmentPage.vue') },
+      { path: 'addAppointment', component: () => import('pages/appointment/AddAppointmentPage.vue') },
+    ]
+  },
+  {
+    path: '/report',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/report/TransactionReportPage.vue') },
+    ]
+  },
+  {
     path: '/login',
     // component: () => import('pages/login/NewLoginPage.vue')
     component: () => import('pages/login/LoginPage.vue')

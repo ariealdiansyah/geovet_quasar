@@ -77,7 +77,6 @@ const addDataMedicine = () => {
 };
 
 const addActionMedicine = async (type, id) => {
-  console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`medicine/${id}`);
@@ -87,7 +86,7 @@ const addActionMedicine = async (type, id) => {
       break;
     case "delete":
       isLoading.value = true;
-      const res = await store.dispatch("medicine/deleteData", id);
+      await store.dispatch("medicine/deleteData", id);
       showNotification({
         message: "Sukses hapus data",
         color: "warning",

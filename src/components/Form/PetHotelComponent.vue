@@ -116,7 +116,6 @@ const addPetHotel = () => {
     roomNumber: roomNumber.value,
     roomType: roomType.value,
   };
-  console.log("data", data);
 
   emit("onAddTransaction", data);
 };

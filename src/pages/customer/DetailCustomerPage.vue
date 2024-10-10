@@ -117,7 +117,6 @@ const router = useRouter();
 const data = computed(() => store.getters["customer/getDetail"]);
 
 onMounted(async () => {
-  console.log("route", route.params.id);
   await store.dispatch("customer/getDetail", route.params.id);
 });
 

@@ -1,7 +1,6 @@
 import { api } from 'boot/axios'
 
 export const printInvoice = async ({ dispatch, rootGetters }, { data }) => {
-  console.log('masuk print', data)
   const { default: PrintService } = await import(
     'src/services/print/invoice'
   );
@@ -63,11 +62,8 @@ export const getSummary = async ({ commit }, rangeDate) => {
 }
 
 export const getDataTransaction = async ({ rootGetters, commit }, filter) => {
-  // console.log('masuk data', filter)
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
-
     const dynamicParams = {
       page: handlerPage.page,
       per_page: handlerPage.rowsPerPage,

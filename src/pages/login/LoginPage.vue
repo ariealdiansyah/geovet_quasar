@@ -18,7 +18,9 @@
               <div class="row q-mt-lg">
                 <div class="col-12 q-px-md">
                   <div class="row q-mb-sm items-center">
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-bold text-center">
+                    <div
+                      class="col-md-4 col-sm-4 col-xs-12 text-bold text-center"
+                    >
                       Username
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-12 q-pl-md">
@@ -32,7 +34,9 @@
                     </div>
                   </div>
                   <div class="row q-mb-sm items-center">
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-bold text-center">
+                    <div
+                      class="col-md-4 col-sm-4 col-xs-12 text-bold text-center"
+                    >
                       Password
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-12 q-pl-md">
@@ -70,7 +74,8 @@
             </q-form>
             <div class="row text-dark q-mt-xl">
               <span class="q-mx-md"
-                >If you don't have account, please sign up with this button below</span
+                >If you don't have account, please sign up with this button
+                below</span
               >
             </div>
             <div class="row q-gutter-x-md q-pa-md">
@@ -113,14 +118,10 @@ const login = async () => {
     password: password.value,
   };
   const res = await store.dispatch("login/loginUser", dataLogin);
-  console.log('login page',res)
   if (res) {
-    console.log('masuk if has res login page',res)
     router.push("/");
   }
 };
 
-const signUp = () => {
-  // console.log("signUp", username.value, password.value);
-};
+const signUp = () => {};
 </script>

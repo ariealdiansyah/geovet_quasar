@@ -125,17 +125,14 @@ const addData = () => {
   router.push("transaction/addTrx");
 };
 const addActionTransaction = async (type, id) => {
-  // console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`transaction/${id}`);
       break;
     case "edit":
-      // console.log("edit", type);
       router.push(`transaction/${id}/edit`);
       break;
     case "delete":
-      // console.log("delete", type);
       isLoading.value = true;
       const res = await store.dispatch("transaction/deleteData", id);
       if (res) {
@@ -149,6 +146,5 @@ const addActionTransaction = async (type, id) => {
 onMounted(async () => {
   store.commit("global/setDefaultGlobalPagination");
   const res = await store.dispatch("transaction/getDataTransaction");
-  // console.log("onMounted", res, data.value);
 });
 </script>

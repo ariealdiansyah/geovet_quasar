@@ -348,13 +348,6 @@ const updatePrice = () => {
   const discountValue = parseInt(discount.value) || 0; // Default to 0 if invalid
   sumPrice.value = totalTransaction.value - discountValue;
   change.value = pay.value ? parseInt(pay.value) - sumPrice.value : 0;
-  console.log(
-    "Total Transaction:",
-    totalTransaction.value,
-    "Discount:",
-    discount.value
-  );
-  console.log("Sum Price:", sumPrice.value);
 };
 
 const onDiscountSave = () => {
@@ -392,7 +385,6 @@ const addTransaction = () => {
     pay: pay.value ? parseInt(pay.value) : 0,
     change: change.value ? parseInt(change.value) : 0,
   };
-  console.log("data", data);
 
   emit("onAddTransaction", data);
 };

@@ -66,7 +66,6 @@ const nextTime = () => {
 };
 
 const printNow = async () => {
-  console.log("data print", dataTransaction.value);
   const dataPrint = {
     ...dataTransaction.value,
   };

@@ -75,7 +75,6 @@ const addData = () => {
   router.push("groceries/addGroceries");
 };
 const addActionGroceries = async (type, id) => {
-  console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`groceries/${id}`);

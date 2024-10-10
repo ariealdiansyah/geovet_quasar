@@ -9,10 +9,8 @@ export default async ({
   onDone,
   isDownload
 }) => {
-  console.log('masuk service print', isDownload);
   const { default: JSPDF } = await import('jspdf');
   await import('jspdf-autotable');
-  console.log('on service print', data);
   const doc = new JSPDF({
     orientation: 'p',
     unit: 'mm',
@@ -30,8 +28,8 @@ export default async ({
   const address2 = 'Ds Rajasinga, Kec. Trisi'
   // const address3 = 'Indramayu, Jawa barat'
 
-  const availableFonts = doc.getFontList();
-  console.log('available', availableFonts)
+  // const availableFonts = doc.getFontList();
+  // console.log('available', availableFonts)
   data.transactionDetails.forEach((item) => {
     body.push([
       item.groceriesId,
@@ -89,114 +87,3 @@ export default async ({
   const base64String = doc.output('datauristring').split('data:application/pdf;filename=generated.pdf;base64,')[1];
   await LocalPrint(base64String, onDone);
 };
-
-
-// #region - Lama
-// export default async ({
-//   data,
-//   onDone,
-//   isDownload
-// }) => {
-//   console.log('masuk service print', isDownload)
-//   const { default: JSPDF } = await import('jspdf');
-//   await import('jspdf-autotable');
-//   const doc = new JSPDF({
-//     orientation: 'p',
-//     unit: 'mm',
-//     // format: [58, 210]
-//     // format: 'b5'
-//   });
-//   const body = [];
-//   const fontSizeTitle = 10;
-
-//   // const drawCell = function (data) {
-//   //   const doc = data.doc;
-//   //   const rows = data.row;
-//   //   if (data.column.index === data.table.columns.length - 1) {
-//   //     data.cell.styles.halign = 'left';
-//   //   }
-//   //   if (rows.raw.length === 2) {
-//   //     doc.setFillColor(255, 243, 224);
-//   //     doc.setFontStyle('bold');
-//   //   }
-//   //   if (rows.raw[1] == 'D') {
-//   //     doc.setFillColor(255, 226, 226);
-//   //   }
-//   //   if (rows.raw[1] == 'K') {
-//   //     doc.setFillColor(228, 242, 253);
-//   //   }
-//   // };
-
-//   const availableFonts = doc.getFontList();
-//   console.log('available', availableFonts)
-//   doc.autoTable({
-//     didDrawPage(data) {
-//       doc.setFontSize(fontSizeTitle);
-//       const pageWidth = doc.internal.pageSize.getWidth();
-//       const maxWidth = 58; // max width in mm
-//       const title = "Geo Pet Care";
-//       let textWidth = doc.getTextWidth(title);
-//       if (textWidth > maxWidth) {
-//         const scale = maxWidth / textWidth;
-//         doc.setFontSize(fontSizeTitle * scale); // scale font size down to fit max width
-//         textWidth = maxWidth; // new text width is max width
-//       }
-
-//       const x = (pageWidth - textWidth) / 2;
-//       console.log('x', x)
-//       doc.text(title, 5, 2); // 20 is the y-coordinate
-//       // doc.text('Jalan Raya Sumur Watu No.42', 63, 14);
-//       // doc.text('Desa Rajasinga', 75, 18);
-//       // doc.text('Kec. Trisi, Indramayu', 71, 22);
-//       // doc.addImage(iconBRI, 'PNG', 25, 10, 90, 30);
-//     },
-//     // margin: { top: 30 }
-//     margin: { left: 2, right: 2 },
-//     tableWidth: 'wrap',
-//     // styles: { fontSize: 8, border: '1px solid black' },
-//   });
-
-//   // doc.autoTable({
-//   //   // head: [
-//   //   //   getHeader(),
-//   //   //   [...headersPaper, ...headersCoin]
-//   //   // ],
-//   //   body,
-//   //   theme: 'grid',
-//   //   bodyStyles: {
-//   //     lineColor: [0, 0, 0],
-//   //     halign: 'right'
-//   //   },
-//   //   headStyles: {
-//   //     fillColor: 255,
-//   //     textColor: 0,
-//   //     lineWidth: 0.12,
-//   //     lineColor: [0, 0, 0],
-//   //     halign: 'right'
-//   //   },
-//   //   columnStyles: {
-//   //     0: { halign: 'center' },
-//   //     1: { halign: 'center' }
-//   //   },
-//   //   styles: { fontSize: 6.3, border: 0.12 },
-//   //   margin: {
-//   //     top: 40, bottom: 10, left: 10, right: 10
-//   //   },
-//   //   willDrawCell: drawCell
-//   // });
-
-//   // const pageNumber = doc.internal.getNumberOfPages();
-//   // const isMobileDevice = isMobile();
-//   const base64String = doc
-//     .output('datauristring')
-//     .split('data:application/pdf;filename=generated.pdf;base64,')[1];
-
-//   // if (isMobileDevice) {
-//   //   onDone && onDone(base64String, isMobileDevice, pageNumber);
-//   // } else {
-//   if (isDownload) {
-//     return doc.output('save', `test_print.pdf`);
-//   }
-//   await LocalPrint(base64String, onDone);
-//   // }
-// };

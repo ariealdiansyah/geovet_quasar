@@ -548,17 +548,14 @@ const addClinic = async () => {
     age: age_pet.value,
     medicalPrescription: medicalPrescription.value,
   };
-  console.log("dataClinic", dataClinic.value);
 };
 
 const customerChange = (value) => {
-  console.log("value cust", value);
   customerId.value = { ...value };
   petId.value = {};
 };
 
 const petChange = (value) => {
-  console.log("value pet", value);
   petId.value = { ...value };
 };
 
@@ -578,7 +575,6 @@ const addTransaction = (value) => {
   };
   step.value = 3;
   done2.value = true;
-  console.log("after Transaction", dataClinic.value);
 };
 
 const addPetHotel = (value) => {
@@ -594,7 +590,6 @@ const addPetHotel = (value) => {
   };
   step.value = 4;
   done3.value = true;
-  console.log("after Transaction", dataClinic.value);
 };
 
 const addAppointment = (value) => {
@@ -608,7 +603,6 @@ const addAppointment = (value) => {
   };
   step.value = 5;
   done4.value = true;
-  console.log("after Add Appointment", dataClinic.value);
 };
 
 const addMedicalRecord = async () => {
@@ -654,7 +648,6 @@ const goStep5 = () => {
 };
 
 const printNow = async () => {
-  console.log("data print", dataClinic.value);
   const dataPrint = {
     ...dataClinic.value.transaction,
   };

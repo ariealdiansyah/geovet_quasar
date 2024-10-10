@@ -14,7 +14,5 @@ import { onMounted } from "vue";
 
 const route = useRoute();
 
-onMounted(() => {
-  console.log("route", route.params.id);
-});
+onMounted(() => {});
 </script>

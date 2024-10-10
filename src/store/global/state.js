@@ -4,7 +4,7 @@ export default function () {
       sortBy: 'desc',
       descending: false,
       page: 1,
-      rowsPerPage: 5,
+      rowsPerPage: 0,
       rowsNumber: 5
     },
     userProfile: {

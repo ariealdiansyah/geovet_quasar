@@ -55,10 +55,8 @@ const columns = ref([
 
 const requestData = async (eventRequest) => {
   if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
-    console.log("paginatio", eventRequest.pagination);
     store.commit("global/setLocalPagination", eventRequest.pagination);
-    const res = await store.dispatch("customer/getData", eventRequest.filter);
-    // pagination.value = {};
+    await store.dispatch("customer/getData", eventRequest.filter);
   } else {
     showNotification({
       message: "Masukkan minimal 3 huruf/angka untuk filter",
@@ -71,7 +69,7 @@ const data = computed(() => store.getters["customer/getData"]);
 
 onMounted(async () => {
   store.commit("global/setDefaultGlobalPagination");
-  const res = await store.dispatch("customer/getData");
+  await store.dispatch("customer/getData");
 });
 
 const addDataMember = () => {

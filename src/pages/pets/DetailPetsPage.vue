@@ -160,7 +160,6 @@ const typePetOptions = ref([
 ]);
 
 onMounted(async () => {
-  console.log("route", route.params.id);
   await store.dispatch("pets/getDetail", route.params.id);
   const petData = store.getters["pets/getDetail"];
   data.value = { ...petData };

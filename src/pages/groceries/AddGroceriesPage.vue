@@ -168,9 +168,6 @@ const addGroceries = async () => {
 };
 
 const testOnChange = (value) => {
-  console.log("value", value);
-  console.log("id", value.id);
-  console.log("label", value.label);
   type.value = value.label;
 };
 </script>

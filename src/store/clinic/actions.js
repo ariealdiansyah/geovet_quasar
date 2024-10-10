@@ -1,16 +1,12 @@
 import { api } from "boot/axios";
 
 export const getDataClinic = async ({ rootGetters, commit }, filter) => {
-  // console.log('masuk data', filter)
   try {
     const handlerPage = rootGetters["global/getPagination"];
-    console.log("handlerPage", handlerPage);
-
     const dynamicParams = {
       page: handlerPage.page,
-      per_page: handlerPage.rowsPerPage,
+      rowsPerPage: handlerPage.rowsPerPage,
       filter: filter,
-      // Add more parameters as needed
     };
     const res = await api.get(`/medical-record`, {
       params: dynamicParams,
@@ -40,9 +36,6 @@ export const getDataClinic = async ({ rootGetters, commit }, filter) => {
 export const addData = async ({ rootGetters, commit }, data) => {
   try {
     const res = await api.post(`/medical-record/`, data);
-    if (res) {
-      console.log('res', res)
-    }
     return res;
   } catch (error) {
     console.error(error);
@@ -51,14 +44,10 @@ export const addData = async ({ rootGetters, commit }, data) => {
 
 export const editData = async ({ rootGetters, commit }, payload) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
     const res = await api.patch(`/clinic/update/${payload.id}`, {
       ...payload.value
     })
-    if (res) {
-      // console.log('res', res.data)
-    }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
@@ -66,10 +55,8 @@ export const editData = async ({ rootGetters, commit }, payload) => {
 
 export const deleteData = async ({ rootGetters, dispatch }, id) => {
   try {
-    const handlerPage = rootGetters["global/getPagination"];
     const res = await api.delete(`/clinic/delete/${id}`);
     if (res) {
-      // console.log("res", res.data);
       dispatch("getData");
     }
     return res.data;

@@ -16,7 +16,7 @@ export const setDefaultGlobalPagination = (state, value) => {
     sortBy: 'asc',
     descending: false,
     page: 1,
-    rowsPerPage: 5,
+    rowsPerPage: 0,
     rowsNumber: 5
   };
 }

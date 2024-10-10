@@ -99,6 +99,16 @@ const linksList = [
     icon: "storefront",
     link: "/transaction",
   },
+  {
+    title: "Appointment",
+    icon: "event",
+    link: "/appointment",
+  },
+  {
+    title: "Report",
+    icon: "event",
+    link: "/report",
+  },
 ];
 
 export default defineComponent({

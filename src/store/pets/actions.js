@@ -36,9 +36,6 @@ export const getData = async ({ rootGetters, commit }, filter) => {
 export const addData = async ({ dispatch }, data) => {
   try {
     const res = await api.post(`/pet`, data)
-    if (res) {
-      console.log('res', data)
-    }
     dispatch('login/getAllDataPets', null, { root: true })
     return res
   } catch (error) {
@@ -50,7 +47,6 @@ export const editData = async ({ dispatch }, data) => {
   try {
     const res = await api.patch(`/pet/${data._id}`, data)
     if (res) {
-      console.log('res', res)
       dispatch('login/getAllDataPets', null, { root: true })
     }
     return res
@@ -87,9 +83,6 @@ export const getDetail = async ({ commit }, id) => {
 export const generateMedicalNumber = async ({ dispatch }, id) => {
   try {
     const res = await api.post(`/pet/generate-medical-number/${id}`)
-    if (res) {
-      console.log('res', res)
-    }
     dispatch('login/getAllDataPets', null, { root: true })
     return res.medicalNumber
   } catch (error) {

@@ -91,7 +91,6 @@ const addDataGrooming = () => {
 };
 
 const addActionGroomings = async (type, id) => {
-  console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`groomings/${id}`);
