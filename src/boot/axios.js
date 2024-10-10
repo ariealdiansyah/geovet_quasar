@@ -1,48 +1,65 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
+import { Notify } from 'quasar'
+import { useRouter } from 'vue-router'
 
-// Be careful when using SSR for cross-request state pollution
-// due to creating a Singleton instance here;
-// If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
-// "export default () => {}" function below (which runs individually
-// for each client)
-const api = axios.create({ baseURL: 'http://localhost:4000/api/' })
-
-export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
+// Create the API instance with base URL
+const api = axios.create({ baseURL: process.env.API })
+// const router = useRouter()
+export default boot(({ app, store }) => {
   app.config.globalProperties.$axios = axios
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
   app.config.globalProperties.$api = api
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
 
   api.interceptors.request.use(
     function (config) {
-      // Get the authentication token from session storage
-      const authToken = localStorage.getItem('authUser');
-      // Set the authorization header if the token exists
+      const authToken = localStorage.getItem('authUser')
       if (authToken) {
-        // config.headers.Authorization = `Bearer ${authToken}`;
-        config.headers['x-access-token'] = JSON.parse(authToken)
+        // config.headers['x-access-token'] = JSON.parse(authToken)
+        config.headers['Authorization'] = `Bearer ${JSON.parse(authToken)}`
       }
-
-      return config;
+      return config
     },
     function (error) {
-      // Do something with request error
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
-  );
+  )
 
-  // api.interceptors.response.use(
-  //   function (response) {
-  //     return response.data
-  //   }
-  // )
+  api.interceptors.response.use(
+    function (response) {
+      if ([200, 201].includes(response.status)) {
+        return response.data.data
+      }
+      return response
+    },
+    function (error) {
+      const { data } = error.response
+      if (data) {
+        const { code, message } = data;
+        if (code !== 200 && code !== 201) {
+          Notify.create({
+            type: 'negative',
+            message: message || 'An error occurred!',
+            position: 'top',
+            timeout: 3000
+          })
+          if (code === 401) {
+            store.dispatch('login/logout')
+          }
+        }
+
+      }
+      else {
+        Notify.create({
+          type: 'negative',
+          message: 'Network error or server is unreachable',
+          position: 'top',
+          timeout: 3000
+        })
+      }
+
+      return Promise.reject(error)
+    }
+  )
 })
 
 export { axios, api }

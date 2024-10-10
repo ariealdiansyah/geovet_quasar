@@ -1,6 +1,13 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
+      <q-btn
+        flat
+        round
+        color="primary"
+        icon="arrow_back"
+        @click="router.back()"
+      />
       <q-icon name="local_hospital" class="text-weight-bold" size="32px" />
       <span class="q-mx-md">Detail Clinic</span>
     </div>

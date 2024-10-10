@@ -10,10 +10,10 @@
         :columns="columns"
         :loading="isLoading"
         @onRequest="requestData"
-        canDelete
-        canEdit
         @onAddData="addDataMedicine"
         @onAction="addActionMedicine"
+        :canDelete="store.state.global.userProfile.role === 'ADMIN'"
+        :canEdit="store.state.global.userProfile.role === 'ADMIN'"
       />
     </div>
   </q-page>
@@ -39,12 +39,11 @@ const columns = ref([
     field: "name",
   },
   { name: "type", align: "left", label: "Tipe Item", field: "type" },
-  { name: "stock", align: "center", label: "Stock", field: "stock" },
   {
     name: "price",
     label: "Harga",
     align: "center",
-    field: "sell_price",
+    field: "price",
     format: (val) =>
       new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -57,7 +56,7 @@ const columns = ref([
 const requestData = async (eventRequest) => {
   if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
     store.commit("global/setLocalPagination", eventRequest.pagination);
-    await store.dispatch("member/getDataMember", eventRequest.filter);
+    await store.dispatch("medicine/getData", eventRequest.filter);
   } else {
     showNotification({
       message: "Masukkan minimal 3 huruf/angka untuk filter",
@@ -74,7 +73,6 @@ onMounted(async () => {
 });
 
 const addDataMedicine = () => {
-  // router.push(`medicine/1`);
   router.push("medicine/addMedicine");
 };
 
@@ -90,6 +88,11 @@ const addActionMedicine = async (type, id) => {
     case "delete":
       isLoading.value = true;
       const res = await store.dispatch("medicine/deleteData", id);
+      showNotification({
+        message: "Sukses hapus data",
+        color: "warning",
+        icon: "warning",
+      });
       if (res) {
         isLoading.value = false;
       }

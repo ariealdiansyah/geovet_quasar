@@ -1,9 +1,25 @@
 // app global css in SCSS form
+@font-face {
+  font-family: "PSJ";
+  font-style: normal;
+  font-weight: 400;
+  // src: url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap') format("truetype");
+  // src: url('https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap') format("truetype");
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2') format('woff2');
+}
+
+body {
+  font-family: 'PSJ';
+}
+
 .bg-main {
   background-image: url("/src/assets/bg-pnp.jpg");
   background-size: contain;
+  background-repeat: repeat;
   width: auto;
 }
+
 
 .bg-aside {
   background-image: url("/src/assets/bg-pnp.jpg");
@@ -35,12 +51,32 @@
   font-size: 20px;
 }
 
+.text-subtitle {
+  color: $primary;
+  font-weight: bold;
+  font-size: 16px !important;
+}
+
 .full-width {
   width: 100% !important;
 }
 
 .bg-white {
   background-color: $white;
+}
+
+.text-brand {
+  color: #fff700 !important;
+}
+
+.bg-brand {
+  background: #fff700 !important;
+}
+
+.button-nav-stepper {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
 }
 
 @media only screen and (min-width: 1020px) {

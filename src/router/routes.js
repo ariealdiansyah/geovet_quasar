@@ -66,7 +66,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/medicine/MedicinePage.vue') },
-      { path: ':id', component: () => import('pages/medicine/DetailMedicinePage.vue') },
+      {
+        path: ':id',
+        children: [
+          { path: '', component: () => import('pages/medicine/DetailMedicinePage.vue') },
+          { path: 'edit', component: () => import('pages/medicine/EditMedicinePage.vue') },
+        ]
+      },
       { path: 'addMedicine', component: () => import('pages/medicine/AddMedicinePage.vue') },
     ]
   },
@@ -86,8 +92,24 @@ const routes = [
     ]
   },
   {
+    path: '/transaction',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/transaction/TransactionPage.vue') },
+      {
+        path: ':id',
+        children: [
+          { path: '', component: () => import('pages/transaction/DetailTransactionPage.vue') },
+        ]
+      },
+      { path: 'addTrx', component: () => import('pages/transaction/AddTransactionPage.vue') },
+    ]
+  },
+  {
     path: '/login',
+    // component: () => import('pages/login/NewLoginPage.vue')
     component: () => import('pages/login/LoginPage.vue')
+
   },
   // Always leave this as last one,
   // but you can also remove it

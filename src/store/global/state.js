@@ -10,10 +10,12 @@ export default function () {
     userProfile: {
       username: '',
       role: '',
-      name: ''
+      fullname: ''
     },
     dialogOpname: false,
     customerList: [],
     petList: [],
+    petshopList: [],
+    medicineList: [],
   }
 }

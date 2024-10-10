@@ -5,61 +5,79 @@ export const getData = async ({ rootGetters, commit }, filter) => {
     const handlerPage = rootGetters['global/getPagination'];
     const dynamicParams = {
       page: handlerPage.page,
-      per_page: handlerPage.rowsPerPage,
-      search: filter,
-      // Add more parameters as needed
+      rowsPerPage: handlerPage.rowsPerPage,
+      filter: filter,
     };
-    const res = await api.get(`/customer`, {
+    const res = await api.get(`/customers`, {
       params: dynamicParams,
     })
     if (res) {
-      const { data } = res.data
-      commit('setData', data.data)
+      commit('setData', res.list)
+      commit(
+        "global/setLocalPagination",
+        {
+          sortBy: "asc",
+          descending: false,
+          page: res.pagination.page,
+          rowsPerPage: res.pagination.rowsPerPage,
+          rowsNumber: res.pagination.total,
+        },
+        { root: true }
+      );
     }
-    return;
+    return res;
   } catch (error) {
     console.error(error);
   }
 }
 
-export const addData = async ({ rootGetters, commit, dispatch }, data) => {
+export const addData = async ({ dispatch }, data) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    const res = await api.post(`/customer/`, data)
+    const res = await api.post(`/customers/`, data)
     if (res) {
-      console.log('res', res.data)
+      console.log('res', res)
     }
     dispatch('login/getAllDataCustomer', null, { root: true })
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
 }
 
-export const editData = async ({ rootGetters, commit }, data) => {
+export const editData = async ({ dispatch }, data) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    const res = await api.post(`/customer/`, data)
+    const res = await api.patch(`/customers/${data._id}`, data)
     if (res) {
-      console.log('res', res.data)
+      console.log('res', res)
+      dispatch('login/getAllDataCustomer', null, { root: true })
     }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
 }
 
-export const getDetail = async ({ rootGetters, commit }, id) => {
+export const getDetail = async ({ commit }, id) => {
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    const res = await api.get(`/customer/${id}`)
-
-    if (res) {
-      console.log('res', res.data)
-      commit('setData', res.data)
+    const data = await api.get(`/customers/${id}`)
+    if (data) {
+      commit('setDetail', data)
     }
-    return res.data
+    return data
   } catch (error) {
     console.error(error);
   }
 }
+
+export const deleteData = async ({ dispatch }, id) => {
+  try {
+    const res = await api.delete(`/customers/${id}`);
+    if (res) {
+      dispatch("getData");
+      dispatch('login/getAllDataCustomer', null, { root: true })
+    }
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};

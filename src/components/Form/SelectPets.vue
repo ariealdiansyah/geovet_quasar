@@ -42,8 +42,6 @@ const emit = defineEmits(["onChange"]);
 const store = useStore();
 // const options = computed(() => store.state.global.customerList);
 const changeValue = (value) => {
-  console.log("on emit", value);
   emit("onChange", value);
 };
-// console.log("options", options);
 </script>

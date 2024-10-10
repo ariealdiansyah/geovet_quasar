@@ -25,7 +25,7 @@
                 <span class="custom-input-32">
                   <q-input
                     v-model="name"
-                    name="NameGroceries"
+                    name="NameCustomer"
                     outlined
                     dense
                     autocomplete="off"
@@ -42,7 +42,7 @@
                 <span class="custom-input-32">
                   <q-input
                     v-model="address"
-                    name="NameGroceries"
+                    name="CustomerAddress"
                     outlined
                     dense
                     autocomplete="off"
@@ -59,7 +59,7 @@
                 <span class="custom-input-32">
                   <q-input
                     v-model="phoneNumber"
-                    name="NameGroceries"
+                    name="PhoneNumber"
                     outlined
                     dense
                     autocomplete="off"
@@ -70,15 +70,33 @@
                 </span>
               </div>
             </div>
-            <div class="row q-mb-sm items-center">
+            <DynamicSelect
+              classContainer="row q-mb-sm items-center"
+              classLabel="col-3 text-bold text-right"
+              classSelect="col-6 q-pl-md"
+              nameForm="CustomerType"
+              :value="memberType"
+              :options="memberTypeOptions"
+              label="Tipe Member"
+              @onChange="onChangeMember"
+            />
+            <div class="row">
               <div class="col-3"></div>
-              <div class="col-6 q-pl-md">
+              <div class="col-6 q-pl-md flex justify-between q-mt-md">
                 <q-btn
-                  name="AddGroceries"
+                  name="Back"
+                  unelevated
+                  no-caps
+                  color="accent"
+                  label="Back"
+                  @click="router.back()"
+                />
+                <q-btn
+                  name="Add"
                   unelevated
                   no-caps
                   color="primary"
-                  label="Add Customer"
+                  label="Add"
                   type="submit"
                 />
               </div>
@@ -95,6 +113,8 @@ import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import DynamicSelect from "src/components/Form/DynamicSelect.vue";
+import { showNotification } from "src/utils/ui";
 
 const store = useStore();
 const router = useRouter();
@@ -102,20 +122,44 @@ const router = useRouter();
 const name = ref("");
 const address = ref("");
 const phoneNumber = ref("");
+const memberType = ref("");
 const isError = ref(false);
 const errorMessage = ref("");
 
+const memberTypeOptions = ref([
+  {
+    label: "Basic Member",
+    value: "Basic",
+  },
+  {
+    label: "Premium Member",
+    value: "Premium",
+  },
+  {
+    label: "VIP Member",
+    value: "VIP",
+  },
+]);
+
 const addCustomer = async () => {
-  // console.log("Add Groceries", name.value, address.value, phoneNumber.value);
   const res = await store.dispatch("customer/addData", {
     name: name.value,
     address: address.value,
-    phoneNumber: phoneNumber.value,
+    phone: phoneNumber.value,
+    memberType: memberType.value,
   });
 
   if (res) {
-    // console.log("Sukses Add data");
+    showNotification({
+      message: `Sukses tambah data pelanggan baru`,
+      color: "positive",
+      icon: "task_alt",
+    });
     router.push("/customer");
   }
+};
+
+const onChangeMember = (value) => {
+  memberType.value = value.value;
 };
 </script>

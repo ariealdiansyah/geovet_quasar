@@ -1,12 +1,19 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
+      <q-btn
+        flat
+        round
+        color="primary"
+        icon="arrow_back"
+        @click="router.back()"
+      />
       <q-icon
         name="assignment_turned_in"
         class="text-weight-bold"
         size="32px"
       />
-      <span class="q-mx-md">Add Groceries</span>
+      <span class="q-mx-md">Add Petshop</span>
     </div>
     <div class="container q-pa-sm">
       <q-form class="q-mt-md" @submit="addGroceries">
@@ -28,6 +35,22 @@
               </div>
             </div>
             <div class="row q-mb-sm items-center">
+              <div class="col-3 text-bold text-right">Harga Beli</div>
+              <div class="col-6 q-pl-md">
+                <span class="custom-input-32">
+                  <q-input
+                    v-model="buyPrice"
+                    name="BuyPriceGroceries"
+                    outlined
+                    dense
+                    autocomplete="off"
+                    hide-bottom-space
+                    placeholder="0"
+                  />
+                </span>
+              </div>
+            </div>
+            <div class="row q-mb-sm items-center">
               <div class="col-3 text-bold text-right">Harga</div>
               <div class="col-6 q-pl-md">
                 <span class="custom-input-32">
@@ -38,6 +61,7 @@
                     dense
                     autocomplete="off"
                     hide-bottom-space
+                    placeholder="0"
                   />
                 </span>
               </div>
@@ -68,39 +92,28 @@
                     dense
                     autocomplete="off"
                     hide-bottom-space
+                    placeholder="0"
                   />
                 </span>
               </div>
             </div>
-            <!-- <DynamicSelect
-              classContainer="row q-mb-sm items-center"
-              classLabel="col-3 text-bold text-right"
-              classSelect="col-6 q-pl-md"
-              nameForm="Customer"
-              :value="type"
-              :options="store.state.global.customerList"
-              label="Nama Pelanggan"
-              @onChange="testOnChange"
-            />
-            <DynamicSelect
-              classContainer="row q-mb-sm items-center"
-              classLabel="col-3 text-bold text-right"
-              classSelect="col-6 q-pl-md"
-              nameForm="Customer"
-              :value="type"
-              :options="store.state.global.petList"
-              label="Nama Hewan Peliharaan"
-              @onChange="testOnChange"
-            /> -->
-            <div class="row q-mb-sm items-center">
+            <div class="row">
               <div class="col-3"></div>
-              <div class="col-6 q-pl-md">
+              <div class="col-6 q-pl-md flex justify-between">
                 <q-btn
-                  name="AddGroceries"
+                  name="Back"
+                  unelevated
+                  no-caps
+                  color="accent"
+                  label="Back"
+                  @click="router.back()"
+                />
+                <q-btn
+                  name="Edit"
                   unelevated
                   no-caps
                   color="primary"
-                  label="Add Groceries"
+                  label="Add"
                   type="submit"
                 />
               </div>
@@ -113,32 +126,43 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import DynamicSelect from "src/components/Form/DynamicSelect.vue";
+import { showNotification } from "src/utils/ui";
 
 const store = useStore();
 const router = useRouter();
 
 const name = ref("");
-const price = ref(0);
+const price = ref("");
+const buyPrice = ref("");
 const type = ref("");
-const stock = ref(0);
-const options = ["Dry Food", "Wet Food", "Shampoo", "Food Bowl", "Cat Litter"];
+const stock = ref("");
+const options = [
+  "Dry Food",
+  "Wet Food",
+  "Shampoo",
+  "Food Bowl",
+  "Cat Litter",
+  "Accesories",
+];
 
 const addGroceries = async () => {
-  // console.log("Add Groceries", name.value, price.value, type.value, stock.value);
   const res = await store.dispatch("groceries/addData", {
     name: name.value,
-    price: price.value,
+    price: parseInt(price.value),
     type: type.value,
-    stock: stock.value,
+    stock: parseInt(stock.value),
+    buyPrice: parseInt(buyPrice.value),
   });
 
   if (res) {
-    // console.log("Sukses Add data");
+    showNotification({
+      message: "Sukses tambah data petshop baru",
+      color: "positive",
+      icon: "task_alt",
+    });
     router.push("/groceries");
   }
 };

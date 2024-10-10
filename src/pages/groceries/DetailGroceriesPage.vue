@@ -1,8 +1,19 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
-      <q-icon name="assignment_turned_in" class="text-weight-bold" size="32px" />
-      <span class="q-mx-md">Detail Groceries</span>
+      <q-btn
+        flat
+        round
+        color="primary"
+        icon="arrow_back"
+        @click="router.back()"
+      />
+      <q-icon
+        name="assignment_turned_in"
+        class="text-weight-bold"
+        size="32px"
+      />
+      <span class="q-mx-md">Detail Petshop</span>
     </div>
     <div class="container q-pa-sm">
       <q-form class="q-mt-md" @submit="editGroceries">
@@ -18,6 +29,23 @@
                     outlined
                     filled
                     dense
+                    autocomplete="off"
+                    hide-bottom-space
+                    disable
+                  />
+                </span>
+              </div>
+            </div>
+            <div class="row q-mb-sm items-center">
+              <div class="col-3 text-bold text-right">Harga Beli</div>
+              <div class="col-6 q-pl-md">
+                <span class="custom-input-32">
+                  <q-input
+                    v-model="dataDetail.buyPrice"
+                    name="NameGroceries"
+                    outlined
+                    dense
+                    filled
                     autocomplete="off"
                     hide-bottom-space
                     disable
@@ -75,7 +103,7 @@
                 </span>
               </div>
             </div>
-            <div class="row q-mb-sm items-center">
+            <div class="row q-mt-md items-center">
               <div class="col-3"></div>
               <div class="col-6 q-pl-md">
                 <q-btn
@@ -83,17 +111,9 @@
                   name="backButton"
                   unelevated
                   no-caps
-                  color="secondary"
+                  color="accent"
                   label="Back"
                   @click.prevent="back()"
-                />
-                <q-btn
-                  name="AddGroceries"
-                  unelevated
-                  no-caps
-                  color="primary"
-                  label="Edit Groceries"
-                  type="submit"
                 />
               </div>
             </div>
@@ -107,12 +127,11 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, computed } from "vue";
 
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
-// const dataDetail = ref();
 
 const dataDetail = computed(() => store.state.groceries.dataDetail);
 
@@ -125,7 +144,6 @@ const back = () => {
 };
 
 onMounted(async () => {
-  const res = await store.dispatch("groceries/getDetail", route.params.id);
-  // console.log("dataDetail detail", dataDetail);
+  await store.dispatch("groceries/getDetail", route.params.id);
 });
 </script>

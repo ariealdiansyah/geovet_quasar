@@ -8,6 +8,8 @@
     :loading="props.loading"
     :class="classTable"
     @request="onRequest"
+    :no-data-label="noDataLabel"
+    :no-results-label="noResultsLabel"
   >
     <template #top-right>
       <q-input
@@ -33,7 +35,9 @@
         >
           {{ col.label }}
         </q-th>
-        <q-th style="font-weight: bold; text-align: center"> Action </q-th>
+        <q-th style="font-weight: bold; text-align: center" v-if="hasAction">
+          Action
+        </q-th>
       </q-tr>
     </template>
     <template v-slot:body="lists">
@@ -46,7 +50,7 @@
         >
           {{ col.value || "-" }}
         </q-td>
-        <q-td style="text-align: center">
+        <q-td style="text-align: center" v-if="hasAction">
           <q-btn-group flat rounded push>
             <q-btn
               :name="`ButtonDetail${lists.rowIndex + 1}`"
@@ -132,6 +136,12 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   canDelete: { type: Boolean, default: false },
   canEdit: { type: Boolean, default: false },
+  hasAction: { type: Boolean, default: true },
+  noDataLabel: { type: String, default: "Tidak ada data saat ini" },
+  noResultsLabel: {
+    type: String,
+    default: "Tidak ada data yang ditemukan dengan filter tersebut",
+  },
 });
 
 const store = useStore();
@@ -153,17 +163,14 @@ const addData = () => {
 };
 
 const onDetail = (data) => {
-  // console.log("test click table", data);
-  emit("onAction", "detail", data.id);
+  emit("onAction", "detail", data._id);
 };
 
 const onEdit = (data) => {
-  // console.log("test click table", data);
-  emit("onAction", "edit", data.id);
+  emit("onAction", "edit", data._id);
 };
 
 const onDelete = (data) => {
-  // console.log("test click table", data);
-  emit("onAction", "delete", data.id);
+  emit("onAction", "delete", data._id);
 };
 </script>

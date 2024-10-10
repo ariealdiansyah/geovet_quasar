@@ -1,8 +1,19 @@
 <template>
   <q-page class="bg-white q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
-      <q-icon name="assignment_turned_in" class="text-weight-bold" size="32px" />
-      <span class="q-mx-md">Edit Groceries</span>
+      <q-btn
+        flat
+        round
+        color="primary"
+        icon="arrow_back"
+        @click="router.back()"
+      />
+      <q-icon
+        name="assignment_turned_in"
+        class="text-weight-bold"
+        size="32px"
+      />
+      <span class="q-mx-md">Edit Petshop</span>
     </div>
     <q-form class="q-mt-md" @submit="editGroceries">
       <div class="row q-gutter-x-lg q-mt-lg">
@@ -12,10 +23,25 @@
             <div class="col-6 q-pl-md">
               <span class="custom-input-32">
                 <q-input
-                  v-model="name"
+                  v-model="editData.name"
                   name="NameGroceries"
                   outlined
-                  filled
+                  dense
+                  autocomplete="off"
+                  hide-bottom-space
+                />
+              </span>
+            </div>
+          </div>
+          <div class="row q-mb-sm items-center">
+            <div class="col-3 text-bold text-right">Harga Beli</div>
+            <div class="col-6 q-pl-md">
+              <span class="custom-input-32">
+                <q-input
+                  v-model.number="editData.buyPrice"
+                  name="NameGroceries"
+                  type="number"
+                  outlined
                   dense
                   autocomplete="off"
                   hide-bottom-space
@@ -28,11 +54,11 @@
             <div class="col-6 q-pl-md">
               <span class="custom-input-32">
                 <q-input
-                  v-model="price"
+                  v-model.number="editData.price"
                   name="NameGroceries"
+                  type="number"
                   outlined
                   dense
-                  filled
                   autocomplete="off"
                   hide-bottom-space
                 />
@@ -44,10 +70,10 @@
             <div class="col-6 q-pl-md">
               <span class="custom-select-32">
                 <q-select
-                  outlined=""
+                  outlined
                   autocomplete="off"
                   dense
-                  v-model="type"
+                  v-model="editData.type"
                   :options="options"
                   hide-bottom-space=""
                 />
@@ -59,10 +85,11 @@
             <div class="col-6 q-pl-md">
               <span class="custom-input-32">
                 <q-input
-                  v-model="stock"
+                  v-model.number="editData.stock"
                   name="NameGroceries"
-                  filled
+                  type="number"
                   dense
+                  outlined
                   autocomplete="off"
                   hide-bottom-space
                 />
@@ -100,21 +127,23 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { onMounted, computed, ref } from "vue";
+import { onMounted, ref } from "vue";
+import { showNotification } from "src/utils/ui";
 
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
 const options = ["Dry Food", "Wet Food", "Shampoo", "Food Bowl", "Cat Litter"];
+const editData = ref({});
 
 const editGroceries = async () => {
-  // router.push(`${route.params.id}/edit`);
-  // console.log("aya data ", dataDetail);
-  const res = await store.dispatch("groceries/editData", {
-    id: route.params.id,
-    value: dataDetail.value,
-  });
+  const res = await store.dispatch("groceries/editData", { ...editData.value });
   if (res) {
+    showNotification({
+      message: `Sukses edit data ${editData.value.name} `,
+      color: "positive",
+      icon: "task_alt",
+    });
     router.push("/groceries");
   }
 };
@@ -123,62 +152,10 @@ const back = () => {
   router.back();
 };
 
-const name = computed({
-  get() {
-    return store.state.groceries.dataDetail.name || "";
-  },
-  set(value) {
-    store.commit("groceries/setDataTempEdit", {
-      type: "name",
-      value: value,
-    });
-  },
-});
-
-const price = computed({
-  get() {
-    return store.state.groceries.dataDetail.price || 0;
-  },
-  set(value) {
-    store.commit("groceries/setDataTempEdit", {
-      type: "price",
-      value: value,
-    });
-  },
-});
-
-const type = computed({
-  get() {
-    return store.state.groceries.dataDetail.type || "";
-  },
-  set(value) {
-    store.commit("groceries/setDataTempEdit", {
-      type: "type",
-      value: value,
-    });
-  },
-});
-
-const stock = computed({
-  get() {
-    return store.state.groceries.dataDetail.stock || "";
-  },
-  set(value) {
-    store.commit("groceries/setDataTempEdit", {
-      type: "stock",
-      value: value,
-    });
-  },
-});
-
-const dataDetail = computed(() => store.state.groceries.dataDetail);
-// const dataTemp = computed(() => store.state.groceries.dataTemp);
-
 onMounted(async () => {
-  const res = await store.dispatch("groceries/getDetail", route.params.id);
-  // console.log("dataDetail detail", dataDetail);
-  // if (res) {
-  //   dataTemp.value = { ...dataDetail };
-  // }
+  // const res = await store.dispatch("groceries/getDetail", route.params.id);
+  await store.dispatch("groceries/getDetail", route.params.id);
+  const data = store.getters["groceries/getDetail"];
+  editData.value = { ...data };
 });
 </script>

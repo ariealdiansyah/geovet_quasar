@@ -1,22 +1,32 @@
 import { api } from 'boot/axios'
+import { root } from 'postcss';
 
 export const getData = async ({ rootGetters, commit }, filter) => {
   try {
     const handlerPage = rootGetters['global/getPagination']
     const dynamicParams = {
       page: handlerPage.page,
-      per_page: handlerPage.rowsPerPage,
-      search: filter,
-      // Add more parameters as needed
+      rowsPerPage: handlerPage.rowsPerPage,
+      filter: filter,
     };
     const res = await api.get(`/medicine/`, {
       params: dynamicParams,
     })
 
     if (res) {
-      const { data } = res.data;
-      console.log('res', res.data)
-      commit('setData', data.data)
+      const { list } = res;
+      commit('setData', list)
+      commit(
+        "global/setLocalPagination",
+        {
+          sortBy: "asc",
+          descending: false,
+          page: res.pagination.page,
+          rowsPerPage: res.pagination.rowsPerPage,
+          rowsNumber: res.pagination.total,
+        },
+        { root: true }
+      );
     }
     return res.data
   } catch (error) {
@@ -24,25 +34,28 @@ export const getData = async ({ rootGetters, commit }, filter) => {
   }
 }
 
-export const addData = async (data) => {
+export const addData = async ({ dispatch }, data) => {
+  console.log('data obat', data)
   try {
-    const res = await api.post(`/medicine/create`, data)
+    const res = await api.post(`/medicine`, data)
     if (res) {
-      console.log('res', res.data)
+      console.log('res', res)
+      dispatch("login/getAllDataMedicine", null, { root: true })
     }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
 }
 
-export const editData = async ({ rootGetters }, data) => {
+export const editData = async ({ dispatch }, data) => {
   try {
     const res = await api.post(`/medicine/`, data)
     if (res) {
-      console.log('res', res.data)
+      console.log('res', res)
+      dispatch("login/getAllDataMedicine", null, { root: true })
     }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
@@ -53,10 +66,10 @@ export const getDetail = async ({ rootGetters, commit }, id) => {
     const res = await api.get(`/medicine/${id}`)
 
     if (res) {
-      console.log('res', res.data)
-      commit('setData', res.data)
+      console.log('res', res)
+      commit('setDetail', res)
     }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
@@ -64,12 +77,13 @@ export const getDetail = async ({ rootGetters, commit }, id) => {
 
 export const deleteData = async ({ rootGetters, dispatch }, id) => {
   try {
-    const res = await api.delete(`/medicine/delete/${id}`);
+    const res = await api.delete(`/medicine/${id}`);
     if (res) {
-      console.log("res", res.data);
+      console.log("res", res);
       dispatch("getData");
+      dispatch("login/getAllDataMedicine", null, { root: true })
     }
-    return res.data;
+    return res;
   } catch (error) {
     console.error(error);
   }

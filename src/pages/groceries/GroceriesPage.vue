@@ -2,7 +2,7 @@
   <q-page class="bg-main q-py-xl q-px-xl">
     <div class="row text-title-menu items-center q-mb-md">
       <q-icon name="storefront" class="text-weight-bold" size="32px" />
-      <span class="q-mx-md">Groceries </span>
+      <span class="q-mx-md">Petshop </span>
     </div>
     <div class="container q-pa-sm">
       <TableData
@@ -12,10 +12,9 @@
         @onRequest="requestData"
         @onAddData="addData"
         @onAction="addActionGroceries"
-        canDelete
-        canEdit
+        :canDelete="store.state.global.userProfile.role === 'ADMIN'"
+        :canEdit="store.state.global.userProfile.role === 'ADMIN'"
       />
-      <!-- <span>{{ data }}</span> -->
     </div>
   </q-page>
 </template>
@@ -25,7 +24,6 @@ import { useStore } from "vuex";
 import { computed, onMounted, ref } from "vue";
 import { showNotification } from "src/utils/ui";
 import { useRouter } from "vue-router";
-import Formatter from "src/helper/index";
 import TableData from "src/components/TableData/TableData.vue";
 
 const store = useStore();
@@ -45,7 +43,7 @@ const columns = ref([
     name: "price",
     label: "Harga",
     align: "center",
-    field: "sell_price",
+    field: "price",
     format: (val) =>
       new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -57,17 +55,7 @@ const columns = ref([
 
 const requestData = async (eventRequest) => {
   if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
-    console.log("pagination request", eventRequest.pagination);
-    if (eventRequest.pagination.rowsPerPage === 0) {
-      const temp = {
-        ...eventRequest.pagination,
-        rowsPerPage: eventRequest.pagination.rowsNumber,
-      };
-      console.log("temp pagination", temp);
-      store.commit("global/setLocalPagination", temp);
-    } else {
-      store.commit("global/setLocalPagination", eventRequest.pagination);
-    }
+    store.commit("global/setLocalPagination", eventRequest.pagination);
     await store.dispatch("groceries/getData", eventRequest.filter);
   } else {
     showNotification({
@@ -99,6 +87,11 @@ const addActionGroceries = async (type, id) => {
       isLoading.value = true;
       const res = await store.dispatch("groceries/deleteData", id);
       if (res) {
+        showNotification({
+          message: "Sukses hapus data",
+          color: "warning",
+          icon: "warning",
+        });
         isLoading.value = false;
       }
       break;

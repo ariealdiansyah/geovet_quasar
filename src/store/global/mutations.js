@@ -2,7 +2,6 @@ export const setLocalPagination = (state, value) => {
   const {
     sortBy, descending, page, rowsPerPage, rowsNumber
   } = value;
-  console.log('check pagination', value)
   state.localPagination = {
     sortBy,
     descending,
@@ -23,15 +22,7 @@ export const setDefaultGlobalPagination = (state, value) => {
 }
 
 export const setUserActive = (state, value) => {
-  console.log('value mutations', value)
-  const [header, data, signature] = value.split('.');
-  const decodedPayload = JSON.parse(atob(data));
-  const userProfile = {
-    username: decodedPayload.username,
-    name: decodedPayload.name,
-    role: decodedPayload.role
-  }
-  console.log('mutations', userProfile)
+  const userProfile = value
   state.userProfile = userProfile
   state.token = value
 }
@@ -45,10 +36,9 @@ export const setListCustomer = (state, payload) => {
     return {
       ...item,
       label: `${item.name} - ${item.address}`,
-      valueOptions: item.id
+      value: item._id
     }
   })
-  console.log('update customer list', list)
   state.customerList = list
 }
 
@@ -56,10 +46,54 @@ export const setListPets = (state, payload) => {
   const list = payload.map((item) => {
     return {
       ...item,
-      label: `${item.name} - ${item.address}`,
-      valueOptions: item.id
+      label: `${item.name} - ${getPetType(item.type)} ${item.medicalNumber ? `- ${item.medicalNumber}` : ''}`,
+      value: item._id
     }
   })
-  console.log('update pet list', list)
   state.petList = list
 }
+
+export const setListPetshop = (state, payload) => {
+  const list = payload.map((item) => {
+    return {
+      ...item,
+      label: item.name,
+      value: item._id,
+    }
+  })
+  state.petshopList = list.filter((x) => x.stock > 0)
+}
+
+export const setListMedicine = (state, payload) => {
+  const list = payload.map((item) => {
+    return {
+      ...item,
+      label: item.name,
+      value: item._id
+    }
+  })
+  state.medicineList = list
+}
+
+const getPetType = (value) => {
+  switch (value) {
+    case "KCG":
+      return "Kucing";
+    case "AYM":
+      return "AYAM";
+    case "EXO":
+      return "Exotic Pet";
+    case "FRM":
+      return "Ternak";
+  }
+}
+
+const getPetSex = (value) => {
+  switch (value) {
+    case "L":
+      return "Laki - Laki";
+    case "P":
+      return "Perempuan";
+  }
+}
+

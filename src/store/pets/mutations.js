@@ -1,4 +1,12 @@
 export const setData = (state, payload) => {
-  console.log("payload pets", payload);
   state.data = payload;
 };
+
+export const setDetail = (state, payload) => {
+  const data = {
+    ...payload,
+    // type: getType(payload.type),
+    // sex: getSex(payload.sex)
+  }
+  state.detail = data
+}

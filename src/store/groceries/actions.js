@@ -5,61 +5,55 @@ export const getData = async ({ rootGetters, commit }, filter) => {
     const handlerPage = rootGetters["global/getPagination"];
     const dynamicParams = {
       page: handlerPage.page,
-      per_page: handlerPage.rowsPerPage,
-      search: filter,
-      // Add more parameters as needed
+      rowsPerPage: handlerPage.rowsPerPage,
+      filter: filter,
     };
 
-    // const res = await api.get(`/groceries/?page=${handlerPage.page}&per_page=${handlerPage.rowsPerPage}&search=${filter}`)
     const res = await api.get(`/groceries`, {
       params: dynamicParams,
     });
-    console.log(res)
-    const { data } = res.data;
 
-    if (data) {
-      commit("setData", data.data);
+    if (res) {
+      const { list } = res;
+      commit('setData', list)
       commit(
         "global/setLocalPagination",
         {
           sortBy: "asc",
           descending: false,
-          page: data.current_page,
-          rowsPerPage: data.per_page,
-          rowsNumber: data.total,
+          page: res.pagination.page,
+          rowsPerPage: res.pagination.rowsPerPage,
+          rowsNumber: res.pagination.total,
         },
         { root: true }
       );
     }
-    return data;
+    return res.list;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const addData = async ({ rootGetters, commit }, data) => {
+export const addData = async ({ dispatch }, data) => {
   try {
-    const handlerPage = rootGetters["global/getPagination"];
     const res = await api.post(`/groceries/`, data);
     if (res) {
-      // console.log("res", res.data);
+      dispatch('login/getAllDataPetshop', null, { root: true })
     }
-    return res.data;
+    return res;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const editData = async ({ rootGetters, commit }, payload) => {
+export const editData = async ({ dispatch }, payload) => {
+  console.log('edit data', payload)
   try {
-    const handlerPage = rootGetters['global/getPagination']
-    const res = await api.patch(`/groceries/update/${payload.id}`, {
-      ...payload.value
-    })
+    const res = await api.patch(`/groceries/${payload._id}`, payload)
     if (res) {
-      console.log('res', res.data)
+      dispatch('login/getAllDataPetshop', null, { root: true })
     }
-    return res.data
+    return res
   } catch (error) {
     console.error(error);
   }
@@ -67,13 +61,13 @@ export const editData = async ({ rootGetters, commit }, payload) => {
 
 export const deleteData = async ({ rootGetters, dispatch }, id) => {
   try {
-    const handlerPage = rootGetters["global/getPagination"];
-    const res = await api.delete(`/groceries/delete/${id}`);
+    const res = await api.delete(`/groceries/${id}`);
     if (res) {
-      console.log("res", res.data);
+      console.log("res", res);
       dispatch("getData");
+      dispatch('login/getAllDataPetshop', null, { root: true })
     }
-    return res.data;
+    return res;
   } catch (error) {
     console.error(error);
   }
@@ -81,15 +75,11 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
 
 export const getDetail = async ({ rootGetters, commit }, id) => {
   try {
-    const handlerPage = rootGetters["global/getPagination"];
-    const res = await api.get(`/groceries/detail/${id}`);
-
-    if (res) {
-      console.log("res", res.data);
-      const { data } = res.data;
-      commit("setDataDetail", data);
+    const data = await api.get(`/groceries/${id}`)
+    if (data) {
+      commit('setDetail', data)
     }
-    return res.data;
+    return data;
   } catch (error) {
     console.error(error);
   }

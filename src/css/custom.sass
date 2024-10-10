@@ -26,12 +26,21 @@
         height: 32px
   .q-field
     .q-field__control, .q-field__native
-      min-height: 32px
+      min-height: 32px !important
     &--dense
       .q-field__control, .q-field__marginal
-        height: 32px
+        height: 32px !important
       .q-field__bottom
         font-size: 11px
 
     .q-field__native, .q-field__prefix, .q-field__suffix
       line-height: 13px
+  .q-field__input
+    min-height: 20px !important
+
+.custom-table
+  .q-table__bottom
+    background-color: #00b4ff
+  .q-table__top
+    background-color: $primary
+    color: white

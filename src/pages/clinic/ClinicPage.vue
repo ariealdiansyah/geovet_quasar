@@ -9,6 +9,7 @@
         :data="data"
         :columns="columns"
         :loading="isLoading"
+        :hasAction="false"
         @onRequest="requestData"
         @onAddData="addData"
         @onAction="addActionGroceries"
@@ -23,90 +24,119 @@ import { onMounted, computed, ref } from "vue";
 import TableData from "src/components/TableData/TableData.vue";
 import { showNotification } from "src/utils/ui";
 import { useRouter } from "vue-router";
+import { getTextDate } from "src/utils/date";
+import { date } from "quasar";
 
 const store = useStore();
 const router = useRouter();
 const isLoading = ref(false);
 const columns = ref([
   {
-    name: "medical_number",
-    required: true,
-    label: "No. Rekam Medis",
-    align: "left",
-    field: "medical_number",
-  },
-  {
-    name: "date",
+    name: "medicalDate",
     required: true,
     label: "Tanggal",
-    align: "left",
-    field: "date",
+    align: "center",
+    field: "medicalDate",
+    format: (val) => {
+      return getTextDate(val);
+    },
   },
   {
-    name: "customer_name",
-    required: true,
+    name: "customer",
+    align: "center",
     label: "Nama Pemilik",
-    align: "left",
-    field: "customer_name",
+    field: (row) => row.customer,
+    format: (val) => {
+      if (val?.name) {
+        return `${val.name}`;
+      }
+      return "-";
+    },
   },
   {
-    name: "customer_phone",
-    required: true,
-    label: "Nomor Telepon",
-    align: "left",
-    field: "customer_phone",
+    name: "medicalNumber",
+    align: "center",
+    label: "No. Rekam Medis",
+    field: (row) => row.pet,
+    format: (val) => {
+      if (val?.medicalNumber) {
+        return `${val.medicalNumber}`;
+      }
+      return "-";
+    },
   },
   {
-    name: "pet_name",
-    required: true,
+    name: "petName",
+    align: "center",
     label: "Nama Hewan",
-    align: "left",
-    field: "pet_name",
-  },
-  {
-    name: "pet_type",
-    required: true,
-    label: "Jenis Hewan",
-    align: "left",
-    field: "pet_type",
-  },
-  {
-    name: "anamnase",
-    required: true,
-    label: "Anamnesa",
-    align: "left",
-    field: "anamnase",
+    field: (row) => row.pet,
+    format: (val) => {
+      if (val?.name) {
+        return `${val.name}`;
+      }
+      return "-";
+    },
   },
   {
     name: "diagnosis",
     required: true,
     label: "Diagnosa",
-    align: "left",
+    align: "center",
     field: "diagnosis",
   },
   {
-    name: "clinic_price",
-    label: "Biaya Pemeriksaan",
+    name: "action",
+    required: true,
+    label: "Tindakan",
     align: "center",
-    field: "clinic_price",
-    format: (val) =>
-      new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      }).format(val),
+    field: "action",
   },
   {
-    name: "total_price",
+    name: "petHotel",
+    required: true,
+    label: "Menginap",
+    align: "center",
+    field: (row) => row.petHotel,
+    format: (val) => {
+      if (val?.codeString) {
+        return `${val.codeString}`;
+      }
+      return "Tidak";
+    },
+  },
+  {
+    name: "appointment",
+    required: true,
+    label: "Pemeriksaan Lanjutan",
+    align: "center",
+    field: (row) => row.appointment,
+    format: (val) => {
+      if (val?.date) {
+        return date.formatDate(new Date(val.date), "DD MMM YYYY");
+      }
+      return "Tidak";
+    },
+  },
+  {
+    name: "totalPrice",
     label: "Total Biaya",
     align: "center",
-    field: "total_price",
-    format: (val) =>
-      new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      }).format(val),
+    field: (row) => row.transaction,
+    format: (val) => {
+      if (val?.totalPrice) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(val.totalPrice);
+      } else {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(0);
+      }
+    },
   },
 ]);
 
@@ -122,7 +152,7 @@ const requestData = async (eventRequest) => {
     });
   }
 };
-const data = computed(() => store.getters["clinic/getDataClinic"]);
+const data = computed(() => store.getters["clinic/getData"]);
 const addData = () => {
   router.push("clinic/addClinic");
 };

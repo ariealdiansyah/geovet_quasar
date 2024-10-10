@@ -1,61 +1,79 @@
 import { api } from 'boot/axios'
-import { root } from 'postcss';
+import { Router as router } from 'src/router';
 
 export const loginUser = async ({ commit, dispatch }, login) => {
   try {
-    // const data = new FormData()
     const passwordEncode = btoa(login.password)
     const res = await api.post('auth/login', {
       username: login.username,
       password: passwordEncode
     })
     if (res) {
-      console.log('res', res.data.token)
-      const token = res.data.token;
+      const token = res.access_token;
       localStorage.setItem('authUser', JSON.stringify(token))
-      // router.push('/')0
-      const CACHE_DURATION = 1000;
-      const savedOn = Date.now()
-      const cutoff = Date.now() - CACHE_DURATION;
       dispatch('getAllDataCustomer');
       dispatch('getAllDataPets');
-      setTimeout(() => {
-        console.log('check', savedOn < cutoff, savedOn, cutoff)
-      }, 10000);
-      commit('global/setUserActive', token, { root: true })
+      dispatch('getAllDataPetshop');
+      dispatch('getAllDataMedicine');
+      const datauser = {
+        username: res.username,
+        fullname: res.fullname,
+        role: res.role
+      }
+      commit('global/setUserActive', datauser, { root: true })
     }
-    return res.data
+    return {
+      ...res,
+      access_token: ''
+    };
   } catch (error) {
     console.error(error);
   }
 }
 
 export const getAllDataCustomer = async ({ rootGetters, commit }) => {
-  console.log('masuk get list customer')
   try {
-    const res = await api.get(`/customer/`)
-    if (res) {
-      const { data } = res.data
-      console.log('data yg akan diinput ke list customer', data)
-      commit('global/setListCustomer', data, { root: true })
-    }
-    return res.data
+    const res = await api.get(`/customers/all`)
+    commit('global/setListCustomer', res, { root: true })
+    return res
   } catch (error) {
     console.error(error);
   }
 }
 
 export const getAllDataPets = async ({ rootGetters, commit }) => {
-  console.log('masuk get list pets')
   try {
-    const res = await api.get(`/pets/`)
-    if (res) {
-      const { data } = res.data
-      console.log('data yg akan diinput ke list pets', data)
-      commit('global/setListPets', data, { root: true })
-    }
-    return res.data
+    const res = await api.get(`/pet/all`)
+    commit('global/setListPets', res, { root: true })
+    return res
   } catch (error) {
     console.error(error);
   }
 }
+
+export const getAllDataPetshop = async ({ rootGetters, commit }) => {
+  try {
+    const res = await api.get(`/groceries/all`)
+    commit('global/setListPetshop', res, { root: true })
+    return res
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getAllDataMedicine = async ({ rootGetters, commit }) => {
+  try {
+    const res = await api.get(`/medicine/all`)
+    commit('global/setListMedicine', res, { root: true })
+    return res
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const logout = () => {
+  console.log(router);  // Add this line to see if the router is correctly initialized
+  localStorage.removeItem("authUser");
+  localStorage.clear();
+  router.push('/login');
+};

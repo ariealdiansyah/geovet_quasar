@@ -2,7 +2,14 @@
   <q-layout view="hHh Lpr fFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+        <!-- <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        /> -->
 
         <q-toolbar-title> Geo Vet Care </q-toolbar-title>
 
@@ -22,7 +29,7 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      :width="250"
+      :width="210"
       show-if-above
       bordered
       behavior="desktop"
@@ -31,7 +38,11 @@
       <q-list>
         <q-item-label header> Menu </q-item-label>
 
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        <EssentialLink
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+        />
       </q-list>
     </q-drawer>
 
@@ -64,7 +75,7 @@ const linksList = [
     link: "/pets",
   },
   {
-    title: "Groceries",
+    title: "Petshop",
     icon: "storefront",
     link: "/groceries",
   },
@@ -73,11 +84,11 @@ const linksList = [
     icon: "medication",
     link: "/medicine",
   },
-  {
-    title: "Grooming",
-    icon: "shower",
-    link: "/grooming",
-  },
+  // {
+  //   title: "Grooming",
+  //   icon: "shower",
+  //   link: "/grooming",
+  // },
   {
     title: "Clinic",
     icon: "local_hospital",
@@ -86,7 +97,7 @@ const linksList = [
   {
     title: "Store",
     icon: "storefront",
-    link: "/store",
+    link: "/transaction",
   },
 ];
 
@@ -99,35 +110,25 @@ export default defineComponent({
 
   setup() {
     const leftDrawerOpen = ref(false);
-    // const user = computed(() => store.state.global.userProfile.username);
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
     const name = ref("");
     const user = computed(() => store.getters["global/getUser"]);
-    // const [header, data, signature] = sessionStorage.getItem("authUser").split(".");
-    // const name = JSON.parse(atob(data)).name;
 
     onMounted(() => {
-      // if (sessionStorage.getItem("authUser")) {
-      //   // console.log("ada");
-      // } else {
-      //   // console.log("ga ada");
-      //   router.push("/login");
-      // }
-      // console.log("user value", name);
-      console.log("user value", user);
-      if (!user.value.name) {
+      if (!user.value.fullname) {
         router.push("/login");
       } else {
-        name.value = user.value.name;
+        name.value = user.value.fullname;
       }
     });
 
     const logout = () => {
-      localStorage.removeItem("authUser");
-      localStorage.clear();
-      router.push("/login");
+      // localStorage.removeItem("authUser");
+      // localStorage.clear();
+      // router.push("/login");
+      store.dispatch("login/logout");
     };
 
     return {

@@ -10,13 +10,12 @@
         :columns="columns"
         :loading="isLoading"
         @onRequest="requestData"
-        canDelete
-        canEdit
+        :canDelete="store.state.global.userProfile.role === 'ADMIN'"
+        :canEdit="store.state.global.userProfile.role === 'ADMIN'"
         @onAddData="addData"
         @onAction="addActionPets"
       />
     </div>
-    <!-- <span>{{ data }}</span> -->
   </q-page>
 </template>
 
@@ -33,10 +32,10 @@ const isLoading = ref(false);
 
 const columns = ref([
   {
-    name: "medical_number",
+    name: "medicalNumber",
     label: "No. Rekam Medis",
     align: "center",
-    field: "medical_number",
+    field: "medicalNumber",
   },
   {
     name: "name",
@@ -45,13 +44,55 @@ const columns = ref([
     align: "left",
     field: "name",
   },
-  { name: "type", align: "left", label: "Jenis Hewan", field: "type" },
-  { name: "sex", align: "left", label: "Jenis Kelamin", field: "sex" },
+  {
+    name: "type",
+    align: "left",
+    label: "Jenis Hewan",
+    field: "type",
+    format: (val) => {
+      switch (val) {
+        case "KCG":
+          return "Kucing";
+        case "AYM":
+          return "AYAM";
+        case "EXO":
+          return "Exotic Pet";
+        case "FRM":
+          return "Ternak";
+      }
+    },
+  },
+  {
+    name: "sex",
+    align: "left",
+    label: "Jenis Kelamin",
+    field: "sex",
+    format: (val) => {
+      switch (val) {
+        case "P":
+          return "Betina";
+        case "L":
+          return "Jantan";
+      }
+    },
+  },
   {
     name: "characteristic",
     align: "left",
     label: "Ciri Hewan",
     field: "characteristic",
+  },
+  {
+    name: "customer",
+    align: "left",
+    label: "Pemilik",
+    field: (row) => row.customer,
+    format: (val) => {
+      if (val?.name) {
+        return `${val.name}`;
+      }
+      return "-";
+    },
   },
 ]);
 
@@ -72,7 +113,6 @@ const data = computed(() => store.state.pets.data);
 onMounted(async () => {
   store.commit("global/setDefaultGlobalPagination");
   await store.dispatch("pets/getData");
-  console.log("onMounted", data.value);
 });
 
 const addData = () => {
@@ -80,7 +120,6 @@ const addData = () => {
 };
 
 const addActionPets = async (type, id) => {
-  console.log("action", type, id);
   switch (type) {
     case "detail":
       router.push(`pets/${id}`);
@@ -94,8 +133,6 @@ const addActionPets = async (type, id) => {
       if (res) {
         isLoading.value = false;
       }
-      break;
-    default:
       break;
   }
 };
