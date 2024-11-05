@@ -95,7 +95,7 @@
     >
       <template v-slot:bottom-row>
         <q-tr class="bg-brand">
-          <q-td colspan="2" class="text-right text-subtitle">
+          <q-td colspan="3" class="text-right text-subtitle">
             Total Belanja
           </q-td>
           <q-td class="text-right">{{ totalItem }}</q-td>
@@ -108,8 +108,8 @@
           }}</q-td>
         </q-tr>
         <q-tr class="bg-brand">
-          <q-td colspan="2" class="text-right text-subtitle"> Discount </q-td>
-          <q-td colspan="2" class="text-right text-bold">
+          <q-td colspan="3" class="text-right text-subtitle"> Discount </q-td>
+          <q-td colspan="3" class="text-right text-bold">
             {{
               new Intl.NumberFormat("id-ID", {
                 style: "currency",
@@ -134,10 +134,10 @@
           </q-td>
         </q-tr>
         <q-tr class="bg-brand">
-          <q-td colspan="2" class="text-right text-subtitle">
+          <q-td colspan="3" class="text-right text-subtitle">
             Total Harga
           </q-td>
-          <q-td colspan="2" class="text-right text-bold">{{
+          <q-td colspan="3" class="text-right text-bold">{{
             new Intl.NumberFormat("id-ID", {
               style: "currency",
               currency: "IDR",
@@ -145,9 +145,10 @@
             }).format(sumPrice)
           }}</q-td>
         </q-tr>
-        <q-tr class="bg-brand">
-          <q-td colspan="2" class="text-right text-subtitle"> Bayar </q-td>
-          <q-td colspan="2" class="text-right text-bold">
+        <!-- Pay and Change Section -->
+        <!-- <q-tr class="bg-brand">
+          <q-td colspan="3" class="text-right text-subtitle"> Bayar </q-td>
+          <q-td colspan="3" class="text-right text-bold">
             {{
               new Intl.NumberFormat("id-ID", {
                 style: "currency",
@@ -168,15 +169,27 @@
           </q-td>
         </q-tr>
         <q-tr class="bg-brand">
-          <q-td colspan="2" class="text-right text-subtitle"> Kembali </q-td>
-          <q-td colspan="2" class="text-right text-bold">{{
+          <q-td colspan="3" class="text-right text-subtitle"> Kembali </q-td>
+          <q-td colspan="3" class="text-right text-bold">{{
             new Intl.NumberFormat("id-ID", {
               style: "currency",
               currency: "IDR",
               maximumFractionDigits: 0,
             }).format(change || 0)
           }}</q-td>
-        </q-tr>
+        </q-tr> -->
+        <!-- End Pay and Change Section -->
+      </template>
+      <template v-slot:body-cell-action="props">
+        <q-td>
+          <q-btn flat icon="edit" color="primary" @click="editRow(props.row)" />
+          <q-btn
+            flat
+            icon="delete"
+            color="negative"
+            @click="deleteRow(props.row._id)"
+          />
+        </q-td>
       </template>
     </q-table>
   </div>
@@ -199,6 +212,79 @@
       </div>
     </div>
   </div>
+
+  <q-dialog v-model="dialog" backdrop-filter="blur(4px) saturate(150%)">
+    <q-card style="width: 600px; max-width: 80vw">
+      <q-card-section class="row text-white bg-primary items-center q-pb-md">
+        <div class="text-h6">Pilih Metode Pembayaran</div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
+      </q-card-section>
+      <q-card-section class="q-pb-xl">
+        <DynamicSelect
+          classContainer="row q-mb-sm items-center"
+          classLabel="col-4 text-bold text-right"
+          classSelect="col-7 q-pl-md"
+          nameForm="PaymentMethod"
+          :value="paymentMethod"
+          :options="paymentMethodOptions"
+          label="Pilih Metode Pembayaran"
+          @onChange="onPaymentMethodChange"
+        />
+        <template v-if="paymentMethod && paymentMethod === 'Cash'">
+          <div class="row q-mb-sm items-center">
+            <div class="col-4 text-bold text-right">Nominal Uang</div>
+            <div class="col-7 q-pl-md">
+              <span class="custom-input-32">
+                <q-input
+                  v-model="pay"
+                  name="Characteristic"
+                  outlined
+                  dense
+                  autocomplete="off"
+                  hide-bottom-space
+                  @change="onPayingSave"
+                />
+              </span>
+            </div>
+          </div>
+          <div class="row q-mb-sm items-center">
+            <div class="col-4 text-bold text-right">Kembali</div>
+            <div class="col-7 q-pl-md">
+              <span class="custom-input-32">
+                {{
+                  new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0,
+                  }).format(change || 0)
+                }}
+              </span>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="row q-mb-sm items-center">
+            <div class="col-4 text-bold text-right">Total Belanja</div>
+            <div class="col-7 q-pl-md">
+              <span class="custom-input-32">
+                {{
+                  new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0,
+                  }).format(sumPrice)
+                }}
+              </span>
+            </div>
+          </div>
+        </template>
+      </q-card-section>
+      <q-card-actions class="text-primary justify-end">
+        <q-btn flat label="Bayar" @click="finishTransaction()" v-close-popup />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -224,6 +310,8 @@ const totalItem = ref(0);
 const discount = ref();
 const pay = ref();
 const change = ref();
+const paymentMethod = ref(null);
+const dialog = ref(false);
 
 const petList = ref([]);
 const medicineList = ref([]);
@@ -231,6 +319,7 @@ const oriPetList = computed(() => store.state.global.petshopList);
 const sumPrice = ref(0);
 
 const columns = ref([
+  { name: "action", label: "Actions", align: "center", field: "action" },
   {
     name: "name",
     label: "Nama Item",
@@ -268,6 +357,29 @@ const columns = ref([
       }).format(val),
   },
 ]);
+
+const paymentMethodOptions = ref([
+  {
+    label: "Tunai",
+    value: "Cash",
+  },
+  {
+    label: "Transfer",
+    value: "tf",
+  },
+  {
+    label: "QRIS",
+    value: "qris",
+  },
+]);
+
+const onPaymentMethodChange = (value) => {
+  paymentMethod.value = value.value;
+  if (paymentMethod.value !== "Cash") {
+    pay.value = sumPrice.value;
+    change.value = 0;
+  }
+};
 
 onMounted(() => {
   petList.value = [...store.state.global.petshopList];
@@ -376,6 +488,10 @@ const rulesQuantity = () => {
 };
 
 const addTransaction = () => {
+  dialog.value = true;
+};
+
+const finishTransaction = () => {
   const data = {
     transactionDate: new Date().toISOString(),
     totalAmount: sumPrice.value,
@@ -384,8 +500,63 @@ const addTransaction = () => {
     transactionDetails: list.value,
     pay: pay.value ? parseInt(pay.value) : 0,
     change: change.value ? parseInt(change.value) : 0,
+    paymentMethod: paymentMethod.value,
   };
 
   emit("onAddTransaction", data);
+};
+
+const deleteRow = (id) => {
+  const index = list.value.findIndex((item) => item._id === id);
+
+  if (index !== -1) {
+    const item = list.value[index];
+
+    // Update the stock if the type is petshop
+    if (item.isGroceries) {
+      const petListIndex = petList.value.findIndex((pet) => pet._id === id);
+      if (petListIndex !== -1) {
+        // Increase the stock by the amount of the deleted item
+        petList.value[petListIndex].stock += item.amount;
+      }
+    }
+
+    // Remove the item from the list and update totals
+    totalTransaction.value -= item.totalPrice;
+    totalItem.value -= item.amount;
+    list.value.splice(index, 1);
+    updatePrice();
+  }
+};
+
+const editRow = (row) => {
+  const updatedQuantity = prompt("Enter new quantity:", row.amount);
+
+  if (updatedQuantity !== null && updatedQuantity > 0) {
+    const previousAmount = row.amount;
+    const difference = (parseInt(updatedQuantity) - previousAmount) * row.price;
+
+    // Update the row with the new quantity and price
+    row.amount = parseInt(updatedQuantity);
+    row.totalPrice = parseInt(updatedQuantity) * row.price;
+
+    // Update totals
+    totalTransaction.value += difference;
+    totalItem.value += parseInt(updatedQuantity) - previousAmount;
+
+    // If the type is petshop, update the stock
+    if (row.isGroceries) {
+      const petListIndex = petList.value.findIndex(
+        (pet) => pet._id === row._id
+      );
+      if (petListIndex !== -1) {
+        // Adjust stock accordingly
+        const stockAdjustment = previousAmount - parseInt(updatedQuantity); // positive if decreasing, negative if increasing quantity
+        petList.value[petListIndex].stock += stockAdjustment;
+      }
+    }
+
+    updatePrice();
+  }
 };
 </script>

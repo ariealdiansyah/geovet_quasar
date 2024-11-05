@@ -77,13 +77,13 @@ export const setListMedicine = (state, payload) => {
 
 const getPetType = (value) => {
   switch (value) {
-    case "KCG":
+    case "KC":
       return "Kucing";
-    case "AYM":
+    case "AY":
       return "AYAM";
-    case "EXO":
+    case "EX":
       return "Exotic Pet";
-    case "FRM":
+    case "FM":
       return "Ternak";
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-white q-py-xl q-px-xl">
+  <q-page class="q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-icon name="pets" class="text-weight-bold" size="32px" />
       <span class="q-mx-md">Pets</span>
@@ -51,13 +51,13 @@ const columns = ref([
     field: "type",
     format: (val) => {
       switch (val) {
-        case "KCG":
+        case "KC":
           return "Kucing";
-        case "AYM":
+        case "AY":
           return "AYAM";
-        case "EXO":
+        case "EX":
           return "Exotic Pet";
-        case "FRM":
+        case "FM":
           return "Ternak";
       }
     },

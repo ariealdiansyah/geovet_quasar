@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-py-xl q-px-xl">
+  <q-page class="q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-icon name="person" class="text-weight-bold" size="32px" />
       <span class="q-mx-md">Customer</span>

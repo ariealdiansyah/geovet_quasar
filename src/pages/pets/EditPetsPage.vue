@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-white q-py-xl q-px-xl">
+  <q-page class="q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-btn
         flat
@@ -141,19 +141,19 @@ const optionsSex = ref([
 const typePetOptions = ref([
   {
     label: "Kucing",
-    value: "KCG",
+    value: "KC",
   },
   {
     label: "Ayam",
-    value: "AYM",
+    value: "AY",
   },
   {
     label: "Exotic Pet",
-    value: "EXO",
+    value: "EX",
   },
   {
     label: "Hewan Ternak",
-    value: "FRM",
+    value: "FM",
   },
 ]);
 

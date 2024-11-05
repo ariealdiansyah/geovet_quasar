@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-white q-py-xl q-px-xl">
+  <q-page class="bg-white q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-icon name="local_hospital" class="text-weight-bold" size="32px" />
       <span class="q-mx-md">Detail Grooming</span>

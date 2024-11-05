@@ -13,6 +13,7 @@ import clinic from "./clinic";
 import groomings from "./groomings";
 import transaction from "./transaction";
 import appointment from "./appointment";
+import petHotel from "./petHotel";
 
 /*
  * If not building with SSR mode, you can
@@ -50,7 +51,8 @@ export default store(function (/* { ssrContext } */) {
       clinic,
       groomings,
       transaction,
-      appointment
+      appointment,
+      petHotel
     },
 
     // enable strict mode (adds overhead!)

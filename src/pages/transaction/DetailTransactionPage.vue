@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-white q-py-xl q-px-xl">
+  <q-page class="bg-white q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-btn
         flat
@@ -16,13 +16,21 @@
       <span class="q-mx-md">Detail Transaksi</span>
     </div>
     <div class="container q-pa-sm">
-      <q-card class="row q-gutter-x-lg q-mt-lg">
+      <q-card class="row q-mt-lg">
         <q-card-section class="col-md-6 col-sm-12">
           <div class="row q-mb-sm items-center">
             <div class="col-6 text-bold text-right">Tanggal Transaksi</div>
             <div class="col-6 q-pl-md">
               <span class="custom-input-32">
                 : {{ getTextDate(dataDetail.transactionDate) }}
+              </span>
+            </div>
+          </div>
+          <div class="row q-mb-sm items-center">
+            <div class="col-6 text-bold text-right">Metode Pembayaran</div>
+            <div class="col-6 q-pl-md">
+              <span class="custom-input-32">
+                : {{ getPaymentMethod(dataDetail.paymentMethod) }}
               </span>
             </div>
           </div>
@@ -72,8 +80,17 @@
             </div>
           </div>
         </q-card-section>
+        <q-card-section class="col-md-6 col-sm-12">
+          <q-btn
+            @click="print"
+            icon="print"
+            color="primary"
+            push
+            :loading="loadingPrint"
+          />
+        </q-card-section>
       </q-card>
-      <q-card class="row q-gutter-x-lg q-mt-lg">
+      <q-card class="row q-mt-lg">
         <q-card-section class="col-md-12 col-sm-12">
           <div class="row q-mb-sm items-center">
             <span class="text-bold">List Item</span>
@@ -156,11 +173,24 @@ const route = useRoute();
 const store = useStore();
 const router = useRouter();
 
+const loadingPrint = ref(false);
+
 const dataDetail = computed(() => store.state.transaction.detail);
 const groupData = ref({
   groceries: [],
   medicine: [],
 });
+
+const getPaymentMethod = (value) => {
+  switch (value) {
+    case "tf":
+      return "Transfer";
+    case "Cash":
+      return "Tunai";
+    case "qris":
+      return "QRIS";
+  }
+};
 
 const groupTransactionDetails = (transactionDetails) => {
   const groceries = transactionDetails.filter((item) => item.isGroceries);
@@ -178,4 +208,13 @@ onMounted(async () => {
     dataDetail.value.transactionDetails
   );
 });
+
+const print = async () => {
+  loadingPrint.value = true;
+  console.log(dataDetail.value);
+  await store.dispatch("transaction/printInvoice", {
+    data: dataDetail.value,
+  });
+  loadingPrint.value = false;
+};
 </script>

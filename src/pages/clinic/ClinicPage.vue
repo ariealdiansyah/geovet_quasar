@@ -9,7 +9,7 @@
         :data="data"
         :columns="columns"
         :loading="isLoading"
-        :hasAction="false"
+        :hasAction="true"
         @onRequest="requestData"
         @onAddData="addData"
         @onAction="addActionGroceries"

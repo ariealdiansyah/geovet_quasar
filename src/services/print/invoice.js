@@ -1,6 +1,7 @@
 import { isMobile } from '../validation';
 import { iconBRI } from '../logo';
 import { LocalPrint } from '../utils';
+import { commaAmount2 } from 'src/utils/ui';
 // import PlusSansJakarta from "../../assets/fonts/PSJ/PlusJakartaSans-VariableFont_wght.ttf";
 
 // #region- Baru
@@ -24,7 +25,7 @@ export default async ({
 
   const title = "Geo Pet Care";
 
-  const address = 'Jl. Raya Terisi, samping Indomaret'
+  const address = 'Jalan Raya Terisi, Samping Indomaret'
   const address2 = 'Ds Rajasinga, Kec. Trisi'
   // const address3 = 'Indramayu, Jawa barat'
 
@@ -54,25 +55,41 @@ export default async ({
   doc.setFontSize(6);
   data.transactionDetails.forEach((item) => {
     doc.text(`${item.amount}x - ${item.name}`, 2, lastY, 'left');
-    doc.text(`${item.totalPrice}`, 45, lastY, 'right');
+    doc.text(`${commaAmount2(item.totalPrice)}`, 44.3, lastY, 'right');
     lastY = lastY + 3
   })
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7)
   doc.text('Total Pesanan', 2, lastY + 1, 'left');
-  doc.text(`${data.totalPrice}`, 45, lastY + 1, 'right');
+  doc.text(`${new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(data.totalPrice || 0)}`, 45, lastY + 1, 'right');
   doc.text('Diskon', 2, lastY + 4, 'left');
-  doc.text(`${data.discount}`, 45, lastY + 4, 'right');
+  doc.text(`${new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(data.discount || 0)}`, 45, lastY + 4, 'right');
   doc.text('Total', 2, lastY + 7, 'left');
   doc.text(`${new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0,
-  }).format(data.totalAmount || 0)}`, 45.5, lastY + 7, 'right');
+  }).format(data.totalAmount || 0)}`, 45, lastY + 7, 'right');
   doc.text('Bayar', 2, lastY + 10, 'left');
-  doc.text(`${data.pay}`, 45, lastY + 10, 'right');
+  doc.text(`${new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(data.pay || 0)}`, 45, lastY + 10, 'right');
   doc.text('Kembali', 2, lastY + 13, 'left');
-  doc.text(`${data.change}`, 45, lastY + 13, 'right');
+  doc.text(`${new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(data.change || 0)}`, 45, lastY + 13, 'right');
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(4)

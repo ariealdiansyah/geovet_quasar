@@ -11,7 +11,6 @@
     :no-data-label="noDataLabel"
     :no-results-label="noResultsLabel"
     :virtual-scroll="pagination.rowsPerPage === 0"
-    :rows-per-page-options="pagination.rowsPerPage"
     :style="
       pagination.rowsPerPage === 0 ? 'max-height: 700px' : 'max-height: inherit'
     "

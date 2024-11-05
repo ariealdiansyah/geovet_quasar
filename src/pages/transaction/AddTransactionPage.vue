@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-main q-py-xl q-px-xl">
+  <q-page class="bg-main q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-btn
         flat
@@ -62,13 +62,14 @@ const nextTime = () => {
     color: "positive",
     icon: "task_alt",
   });
-  router.push("/");
+  router.push("/transaction");
 };
 
 const printNow = async () => {
   const dataPrint = {
     ...dataTransaction.value,
   };
+  console.log("dataPrint", dataPrint);
   await store.dispatch("transaction/printInvoice", {
     data: dataPrint,
   });
@@ -77,11 +78,12 @@ const printNow = async () => {
     color: "positive",
     icon: "task_alt",
   });
-  router.push("/");
+  router.push("/transaction");
 };
 
 const addTransaction = async (value) => {
   dataTransaction.value = value;
+  console.log("dataTransaction", dataTransaction.value);
   const res = await store.dispatch(
     "transaction/addTransaction",
     dataTransaction.value

@@ -33,7 +33,7 @@ export const getDataClinic = async ({ rootGetters, commit }, filter) => {
   }
 };
 
-export const addData = async ({ rootGetters, commit }, data) => {
+export const addData = async ({ }, data) => {
   try {
     const res = await api.post(`/medical-record/`, data);
     return res;
@@ -42,7 +42,7 @@ export const addData = async ({ rootGetters, commit }, data) => {
   }
 };
 
-export const editData = async ({ rootGetters, commit }, payload) => {
+export const editData = async ({ }, payload) => {
   try {
     const res = await api.patch(`/clinic/update/${payload.id}`, {
       ...payload.value
@@ -53,7 +53,7 @@ export const editData = async ({ rootGetters, commit }, payload) => {
   }
 };
 
-export const deleteData = async ({ rootGetters, dispatch }, id) => {
+export const deleteData = async ({ dispatch }, id) => {
   try {
     const res = await api.delete(`/clinic/delete/${id}`);
     if (res) {
@@ -65,16 +65,14 @@ export const deleteData = async ({ rootGetters, dispatch }, id) => {
   }
 };
 
-export const getDetail = async ({ rootGetters, commit }, id) => {
+export const getDetail = async ({ commit }, id) => {
   try {
-    const handlerPage = rootGetters["global/getPagination"];
-    const res = await api.get(`/clinic/detail/${id}`);
+    const res = await api.get(`/medical-record/${id}`);
 
     if (res) {
-      const { data } = res.data;
-      commit("setDataDetail", data);
+      commit("setDataDetail", res);
     }
-    return res.data;
+    return res;
   } catch (error) {
     console.error(error);
   }

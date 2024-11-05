@@ -66,7 +66,7 @@ export const getDataTransaction = async ({ rootGetters, commit }, filter) => {
     const handlerPage = rootGetters["global/getPagination"];
     const dynamicParams = {
       page: handlerPage.page,
-      per_page: handlerPage.rowsPerPage,
+      rowsPerPage: handlerPage.rowsPerPage,
       filter: filter,
     };
     const res = await api.get(`/transaction`, {

@@ -267,7 +267,7 @@
                 </div>
               </div>
               <div class="row q-mb-sm items-start">
-                <div class="col-3 text-bold text-right">Resep</div>
+                <div class="col-3 text-bold text-right">Obat</div>
                 <div class="col-9 q-pl-md">
                   <q-input
                     class="custom-input-32"

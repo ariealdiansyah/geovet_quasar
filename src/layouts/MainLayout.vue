@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         /> -->
 
-        <q-toolbar-title> Geo Vet Care </q-toolbar-title>
+        <q-toolbar-title> Geo Pet Care </q-toolbar-title>
 
         <div class="q-pr-md">Hi, {{ name }}</div>
         <q-btn round flat color="white" icon="logout" @click="logout">
@@ -46,7 +46,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container class="bg-main">
+    <q-page-container class="">
       <router-view :key="route.fullPath" />
     </q-page-container>
   </q-layout>
@@ -106,7 +106,7 @@ const linksList = [
   },
   {
     title: "Report",
-    icon: "event",
+    icon: "summarize",
     link: "/report",
   },
 ];

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-white q-py-xl q-px-xl">
+  <q-page class="q-py-xl q-px-xl bg-main">
     <div class="row text-title-menu items-center q-mb-md">
       <q-btn
         flat
@@ -115,6 +115,7 @@
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, ref } from "vue";
+import { showNotification } from "src/utils/ui";
 
 const route = useRoute();
 const editData = ref({});
