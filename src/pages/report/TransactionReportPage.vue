@@ -53,10 +53,12 @@
         </q-card>
       </div>
       <div class="row">
-        <div class="col-6 q-px-md">
+        <div class="col-5 q-px-md">
           <q-card class="q-pb-xl">
-            <q-card-section>
-              <h4 class="text-center">Transaction Summary</h4>
+            <q-card-section class="row justify-center">
+              <span class="text-center q-mb-sm text-bold">
+                Transaction Summary
+              </span>
             </q-card-section>
             <q-card-section v-if="summary">
               <div class="row q-px-xl">
@@ -90,6 +92,37 @@
                       </span>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> Tunai </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.groceries?.cash || 0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> Transfer </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.groceries?.transfer ||
+                              0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-6">
                   <div class="row">
@@ -119,17 +152,75 @@
                       </span>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> Tunai </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.medicine?.cash || 0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> Transfer </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.medicine?.transfer ||
+                              0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row q-mt-md">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <span class="text-bold text-right q-pr-md">
+                        Diskon Keseluruhan :
+                        {{ currencyFormatter(summary.totalDiscounts) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <span class="text-bold text-right q-pr-md">
+                        Profit Petshop :
+                        {{ currencyFormatter(summary.totalGroceriesProfit) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <span class="text-bold text-right q-pr-md">
+                        Profit Klinik :
+                        {{ currencyFormatter(summary.totalMedicineProfit) }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-6 q-px-md">
+        <div class="col-7 q-px-md">
           <q-card class="q-pb-xl">
-            <q-card-section>
-              <h4 class="text-center">Most Popular</h4>
+            <q-card-section class="row justify-center">
+              <span class="text-center q-mb-sm text-bold">Most Popular</span>
             </q-card-section>
-
             <q-card-section v-if="summary">
               <div class="row q-px-xl">
                 <div class="col-6">

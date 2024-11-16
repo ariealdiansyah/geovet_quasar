@@ -21,8 +21,10 @@
         borderless
         dense
         outlined
+        clearable
         debounce="300"
         placeholder="Search"
+        @clear="filter = ''"
       >
         <template #append>
           <q-icon name="search" />
@@ -45,14 +47,20 @@
       </q-tr>
     </template>
     <template v-slot:body="lists">
-      <q-tr :lists="lists">
+      <q-tr
+        :lists="lists"
+        :style="{
+          backgroundColor:
+            hasEmptyValue(lists.row) && needCheck ? '#F72585' : 'transparent',
+        }"
+      >
         <q-td
           :lists="lists"
           v-for="col in lists.cols"
           :key="col.name"
           :style="`text-align:${col.align || 'left'}`"
         >
-          {{ col.value || "-" }}
+          {{ col.value }}
         </q-td>
         <q-td style="text-align: center" v-if="hasAction">
           <q-btn-group flat rounded push>
@@ -147,6 +155,7 @@ const props = defineProps({
     type: String,
     default: "Tidak ada data yang ditemukan dengan filter tersebut",
   },
+  needCheck: { type: Boolean, default: false },
 });
 
 const store = useStore();
@@ -177,5 +186,9 @@ const onEdit = (data) => {
 
 const onDelete = (data) => {
   emit("onAction", "delete", data._id);
+};
+
+const hasEmptyValue = (row) => {
+  return Object.values(row).some((value) => value === "") || row.stock === 0;
 };
 </script>

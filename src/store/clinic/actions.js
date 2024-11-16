@@ -44,22 +44,8 @@ export const addData = async ({ }, data) => {
 
 export const editData = async ({ }, payload) => {
   try {
-    const res = await api.patch(`/clinic/update/${payload.id}`, {
-      ...payload.value
-    })
+    const res = await api.patch(`/medical-record/${payload._id}`, payload)
     return res
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const deleteData = async ({ dispatch }, id) => {
-  try {
-    const res = await api.delete(`/clinic/delete/${id}`);
-    if (res) {
-      dispatch("getData");
-    }
-    return res.data;
   } catch (error) {
     console.error(error);
   }

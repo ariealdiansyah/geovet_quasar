@@ -14,6 +14,7 @@
         @onAction="addActionGroceries"
         :canDelete="store.state.global.userProfile.role === 'ADMIN'"
         :canEdit="store.state.global.userProfile.role === 'ADMIN'"
+        needCheck
       />
     </div>
   </q-page>
@@ -38,7 +39,12 @@ const columns = ref([
     field: "name",
   },
   { name: "type", align: "left", label: "Tipe Item", field: "type" },
-  { name: "stock", align: "center", label: "Stock", field: "stock" },
+  {
+    name: "stock",
+    align: "center",
+    label: "Stock",
+    field: "stock",
+  },
   {
     name: "price",
     label: "Harga",
@@ -54,7 +60,7 @@ const columns = ref([
 ]);
 
 const requestData = async (eventRequest) => {
-  if (eventRequest.filter === "" || eventRequest.filter.length > 2) {
+  if (eventRequest.filter === "" || eventRequest.filter.length >= 2) {
     store.commit("global/setLocalPagination", eventRequest.pagination);
     await store.dispatch("groceries/getData", eventRequest.filter);
   } else {

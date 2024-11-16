@@ -53,9 +53,7 @@
                   }})
                 </p>
                 <p><strong>Context:</strong> {{ event.context }}</p>
-                <p>
-                  <strong>Date:</strong> {{ textDateWithtoutTime(event.date) }}
-                </p>
+                <q-separator inset />
               </div>
             </q-tab-panel>
 

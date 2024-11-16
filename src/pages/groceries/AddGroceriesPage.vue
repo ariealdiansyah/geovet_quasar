@@ -146,6 +146,7 @@ const options = [
   "Food Bowl",
   "Cat Litter",
   "Accesories",
+  "Milk",
 ];
 
 const addGroceries = async () => {

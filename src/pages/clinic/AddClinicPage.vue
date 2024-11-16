@@ -523,12 +523,7 @@ const allowToStep2 = computed(() => {
     Object.keys(customerId.value).length > 0 &&
     petId.value &&
     Object.keys(petId.value).length > 0 &&
-    age_pet.value !== "" &&
-    weight_pet.value !== "" &&
-    temperature_pet.value !== "" &&
-    anamnase.value !== "" &&
-    diagnosis.value !== "" &&
-    medical_action.value !== ""
+    age_pet.value !== ""
   );
 });
 

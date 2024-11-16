@@ -13,6 +13,11 @@
         @onRequest="requestData"
         @onAddData="addData"
         @onAction="addActionGroceries"
+        :canEdit="
+          store.state.global.userProfile.role === 'ADMIN' ||
+          store.state.global.userProfile.role === 'DOC'
+        "
+        needCheck
       />
     </div>
   </q-page>

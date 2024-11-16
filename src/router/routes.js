@@ -85,6 +85,7 @@ const routes = [
         path: ':id',
         children: [
           { path: '', component: () => import('pages/clinic/DetailClinicPage.vue') },
+          { path: 'edit', component: () => import('pages/clinic/EditClinicPage.vue') },
         ]
       },
       { path: 'addClinic', component: () => import('pages/clinic/AddClinicPage.vue') },

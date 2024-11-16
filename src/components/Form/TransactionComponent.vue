@@ -371,6 +371,10 @@ const paymentMethodOptions = ref([
     label: "QRIS",
     value: "qris",
   },
+  {
+    label: "Debt",
+    value: "debt",
+  },
 ]);
 
 const onPaymentMethodChange = (value) => {
@@ -378,6 +382,9 @@ const onPaymentMethodChange = (value) => {
   if (paymentMethod.value !== "Cash") {
     pay.value = sumPrice.value;
     change.value = 0;
+    // } else if (paymentMethod.value === "debt") {
+    //   sumPrice.value = -sumPrice.value;
+    //   pay.value = -sumPrice.value;
   }
 };
 

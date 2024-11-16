@@ -75,6 +75,11 @@ const linksList = [
     link: "/pets",
   },
   {
+    title: "Appointment",
+    icon: "event",
+    link: "/appointment",
+  },
+  {
     title: "Petshop",
     icon: "storefront",
     link: "/groceries",
@@ -98,11 +103,6 @@ const linksList = [
     title: "Store",
     icon: "storefront",
     link: "/transaction",
-  },
-  {
-    title: "Appointment",
-    icon: "event",
-    link: "/appointment",
   },
   {
     title: "Report",

@@ -133,7 +133,15 @@ import { showNotification } from "src/utils/ui";
 const route = useRoute();
 const store = useStore();
 const router = useRouter();
-const options = ["Dry Food", "Wet Food", "Shampoo", "Food Bowl", "Cat Litter"];
+const options = [
+  "Dry Food",
+  "Wet Food",
+  "Shampoo",
+  "Food Bowl",
+  "Cat Litter",
+  "Accesories",
+  "Milk",
+];
 const editData = ref({});
 
 const editGroceries = async () => {
