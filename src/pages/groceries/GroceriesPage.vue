@@ -38,7 +38,12 @@ const columns = ref([
     align: "left",
     field: "name",
   },
-  { name: "type", align: "left", label: "Tipe Item", field: "type" },
+  {
+    name: "type",
+    align: "left",
+    label: "Tipe Item",
+    field: "type",
+  },
   {
     name: "stock",
     align: "center",

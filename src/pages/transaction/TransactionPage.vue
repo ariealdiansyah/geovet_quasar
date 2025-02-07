@@ -106,6 +106,25 @@ const columns = ref([
       }
     },
   },
+  {
+    name: "paymentMethod",
+    label: "Metode Pembayaran",
+    align: "center",
+    field: "paymentMethod",
+    format: (val) => {
+      if (val === "tf") {
+        return "Transfer";
+      } else if (val === "Cash") {
+        return `Tunai`;
+      } else if (val === "qris") {
+        return "QRIS";
+      } else if (val === "kenzo") {
+        return "Kenzo";
+      } else {
+        return "-";
+      }
+    },
+  },
 ]);
 
 const requestData = async (eventRequest) => {

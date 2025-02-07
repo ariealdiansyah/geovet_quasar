@@ -63,3 +63,19 @@ export const getDetail = async ({ commit }, id) => {
     console.error(error);
   }
 };
+
+export const printMedicalRecord = async ({ dispatch, rootGetters }, { data }) => {
+  const { default: PrintService } = await import(
+    'src/services/print/medical'
+  );
+  const res = await new Promise((resolve) => {
+    PrintService({
+      data,
+      onDone: async (base64String, isMobileDevice, pageNumber) => {
+        resolve({ base64String, isMobileDevice, pageNumber });
+      },
+      isDownload: false
+    });
+  });
+  return res;
+};

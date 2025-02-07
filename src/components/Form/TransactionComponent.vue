@@ -244,6 +244,7 @@
                   autocomplete="off"
                   hide-bottom-space
                   @change="onPayingSave"
+                  @keyup.enter="finishTransaction"
                 />
               </span>
             </div>
@@ -374,6 +375,10 @@ const paymentMethodOptions = ref([
   {
     label: "Debt",
     value: "debt",
+  },
+  {
+    label: "Kenzo",
+    value: "kenzo",
   },
 ]);
 

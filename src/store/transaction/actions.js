@@ -14,23 +14,6 @@ export const printInvoice = async ({ dispatch, rootGetters }, { data }) => {
     });
   });
   return res;
-  // const { base64String, isMobileDevice, pageNumber } = res;
-
-  // if (isMobileDevice) {
-  //   const selectedAgent = await showRemoteAgent({ rootGetters }, pageNumber);
-  //   await dispatch(
-  //     'remotePrint/remotePrint',
-  //     {
-  //       typePrint: PRINT_TYPE.REGISTER_OU,
-  //       accountNo: { debit: '', credit: '' },
-  //       base64String,
-  //       agent: selectedAgent.value,
-  //       formatFile: FORMAT_FILE.PDF,
-  //       printerType: PRINTER_TYPE.OLIPRT2
-  //     },
-  //     { root: true }
-  //   );
-  // }
 };
 
 export const addTransaction = async ({ }, data) => {

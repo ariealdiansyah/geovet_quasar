@@ -7,9 +7,12 @@
     <div class="container q-pa-sm">
       <div class="row q-mb-md">
         <q-card class="q-mb-md">
-          <q-card-section class="q-pa-md d-flex justify-center">
+          <q-card-section
+            class="q-pa-md d-flex justify-center"
+            v-if="user.role !== 'STAFF'"
+          >
             <div class="row justify-center">
-              <span class="text-center q-mb-sm text-bold">Pilih Tanggal</span>
+              <span class="text-center q-mb-sm text-bold"> Pilih Tanggal </span>
             </div>
             <div class="row">
               <q-btn-group>
@@ -21,7 +24,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="custom-range">
+          <q-card-section class="custom-range" v-if="user.role !== 'STAFF'">
             <q-input
               filled
               :modelValue="formattedDateRange"
@@ -36,10 +39,10 @@
               </q-popup-proxy>
             </q-input>
           </q-card-section>
-          <q-card-section v-if="summary?.totalIncome">
+          <q-card-section v-if="summary?.totalIncome && user.role !== 'STAFF'">
             <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
           </q-card-section>
-          <q-card-section>
+          <q-card-section v-if="user.role !== 'STAFF'">
             <span>
               Tanggal Laporan :
               <template v-if="dateRange?.from"
@@ -50,10 +53,16 @@
               }}</template>
             </span>
           </q-card-section>
+          <q-card-section v-else>
+            <span>
+              Tanggal Laporan :
+              <span v-if="dateRange?.from">{{ dateRange.from }} </span>
+            </span>
+          </q-card-section>
         </q-card>
       </div>
       <div class="row">
-        <div class="col-5 q-px-md">
+        <div class="col-6 q-px-sm">
           <q-card class="q-pb-xl">
             <q-card-section class="row justify-center">
               <span class="text-center q-mb-sm text-bold">
@@ -61,7 +70,7 @@
               </span>
             </q-card-section>
             <q-card-section v-if="summary">
-              <div class="row q-px-xl">
+              <div class="row q-px-sm">
                 <div class="col-6">
                   <div class="row">
                     <div class="col-12 text-center">
@@ -80,7 +89,7 @@
                       </span>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="user.role !== 'STAFF'">
                     <div class="col-6">
                       <span class="text-bold text-right q-pr-md">
                         Keuntungan
@@ -123,6 +132,21 @@
                       </span>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> QRIS </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.groceries?.qris || 0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-6">
                   <div class="row">
@@ -140,7 +164,7 @@
                       </span>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="user.role !== 'STAFF'">
                     <div class="col-6">
                       <span class="text-bold text-right q-pr-md">
                         Keuntungan
@@ -183,6 +207,21 @@
                       </span>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="text-bold q-pr-md"> QRIS </span>
+                    </div>
+                    <div class="col-6">
+                      <span class="text-bold text-left q-pr-md">
+                        :
+                        {{
+                          currencyFormatter(
+                            summary.paymentMethodSummary?.medicine?.qris || 0
+                          )
+                        }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row q-mt-md">
@@ -195,7 +234,7 @@
                       </span>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="user.role !== 'STAFF'">
                     <div class="col-12 text-center">
                       <span class="text-bold text-right q-pr-md">
                         Profit Petshop :
@@ -203,11 +242,19 @@
                       </span>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="user.role !== 'STAFF'">
                     <div class="col-12 text-center">
                       <span class="text-bold text-right q-pr-md">
                         Profit Klinik :
                         {{ currencyFormatter(summary.totalMedicineProfit) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <span class="text-bold text-right q-pr-md">
+                        Buat Kenzo :
+                        {{ currencyFormatter(summary.kenzoNeed) }}
                       </span>
                     </div>
                   </div>
@@ -216,7 +263,7 @@
             </q-card-section>
           </q-card>
         </div>
-        <div class="col-7 q-px-md">
+        <div class="col-6 q-px-sm">
           <q-card class="q-pb-xl">
             <q-card-section class="row justify-center">
               <span class="text-center q-mb-sm text-bold">Most Popular</span>
@@ -299,6 +346,7 @@ const loaded = ref(false);
 const dateRange = ref();
 
 const summary = computed(() => store.state.transaction.summary);
+const user = computed(() => store.state.global.userProfile);
 
 ChartJS.register(
   Title,

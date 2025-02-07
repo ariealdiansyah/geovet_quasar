@@ -45,6 +45,9 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <q-btn @click="print" icon="print" color="primary" push />
+            </div>
           </div>
           <div class="row q-mt-lg">
             <div class="col-md-6 col-sm-12 q-px-sm">
@@ -529,4 +532,11 @@ onMounted(async () => {
     );
   }
 });
+
+const print = async () => {
+  console.log(dataDetail.value);
+  await store.dispatch("clinic/printMedicalRecord", {
+    data: dataDetail.value,
+  });
+};
 </script>

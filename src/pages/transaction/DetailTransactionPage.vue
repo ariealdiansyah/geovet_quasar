@@ -189,6 +189,8 @@ const getPaymentMethod = (value) => {
       return "Tunai";
     case "qris":
       return "QRIS";
+    case "kenzo":
+      return "Kenzo";
   }
 };
 
@@ -215,6 +217,9 @@ const print = async () => {
   await store.dispatch("transaction/printInvoice", {
     data: dataDetail.value,
   });
+  // await store.dispatch("clinic/printMedicalRecord", {
+  //   data: dataDetail.value,
+  // });
   loadingPrint.value = false;
 };
 </script>

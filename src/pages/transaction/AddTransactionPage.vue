@@ -22,7 +22,7 @@
       <q-card-section class="row text-white bg-primary items-center q-pb-md">
         <div class="text-h6">Print Transaksi</div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn icon="close" flat round dense />
       </q-card-section>
       <q-card-section class="q-pb-xl">
         <div class="row q-gutter-md q-mt-lg">
@@ -36,8 +36,8 @@
         </div>
       </q-card-section>
       <q-card-actions class="text-primary justify-end">
-        <q-btn flat label="Lain Kali" @click="nextTime()" v-close-popup />
-        <q-btn flat label="Print" @click="printNow()" v-close-popup />
+        <q-btn flat label="Lain Kali" @click="nextTime()" />
+        <q-btn flat label="Print" @click="printNow()" />
       </q-card-actions>
     </q-card>
   </q-dialog>
